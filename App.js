@@ -1,76 +1,31 @@
-import React from 'react';
-import {
-    AppRegistry,
-    Text,
-    View,
-    Button,
-    Linking,
-} from 'react-native';
-import {StackNavigator, TabNavigator} from 'react-navigation';
-import ChatScreen from './pages/ChatScreen'
+import React from "react";
+import {AppRegistry, Text, View, Button, Linking} from "react-native";
+import {TabNavigator} from "react-navigation";
+import Profile from "./pages/Profile";
+import Influencers from "./pages/Influencers";
+import Trending from "./pages/Trending";
 
-class HomeScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Welcome',
-    };
-
-    render() {
-        const {navigate} = this.props.navigation;
-        return (
-            <View>
-                <Text>Hello, Chat App!</Text>
-                <Button
-                    onPress={() => navigate('Chat', { user: 'Lucy' })}
-                    title="Chat with Lucy"
-                />
-            </View>
-        );
+const tabConfig = {
+    tabBarPosition: 'bottom',
+    swipeEnabled: true,
+    animationEnabled: true,
+    lazyLoad: false,
+    tabBarOptions: {
+        activeTintColor: '#f8fdff',
+        labelStyle: {
+            fontSize: 12,
+        },
+        style: {
+            backgroundColor: '#ff0081',
+        },
     }
-}
-
-class RecentChatsScreen extends React.Component {
-
-    render() {
-        return <Button
-            onPress={() => Linking.canOpenURL('fb://notifications').then(supported => {
-              if (!supported) {
-                console.log('Can\'t handle url: ');
-              } else {
-                return Linking.openURL('fb://notifications');
-              }
-            }).catch(err => ('An error occurred'+ err))
-            }
-            title="Chat with ..."
-        />
-    }
-}
-
-class AllContactsScreen extends React.Component {
-    render() {
-        return <Button
-            onPress={() => this.props.navigation.navigate('Chat', { user: 'Lucy' })}
-            title="Chat with Lucy"
-        />
-
-    }
-}
-
-const MainScreenNavigator = TabNavigator({
-    Recent: {screen: RecentChatsScreen},
-    All: {screen: AllContactsScreen},
-});
-
-MainScreenNavigator.navigationOptions = {
-    title: 'My Chats',
 };
 
-const myInfluencers = StackNavigator({
-    Home: {screen: MainScreenNavigator},
-    Chat: {
-        screen: ChatScreen,
-
-    }
-});
+const myInfluencers = TabNavigator({
+    Influencers: {screen: Influencers},
+    Trending: {screen: Trending},
+    Profile: {screen: Profile}
+}, tabConfig);
 
 
 AppRegistry.registerComponent('myInfluencers', () => myInfluencers);
