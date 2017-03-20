@@ -1,6 +1,8 @@
 import React from "react";
 import {Text, View, Button, TextInput, StyleSheet} from "react-native";
 
+import Interests from "./Interests";
+
 export default class Profile extends React.Component {
     static navigationOptions = {
         // Nav options can be defined as a function of the navigation prop:
@@ -14,7 +16,7 @@ export default class Profile extends React.Component {
 
     constructor(props) {
         super(props);
-        this.initState = {text: 'a1 a2 a3'};
+        this.initState = {text: ['a1', 'a2', 'a3']};
         this.state = {text: ''};
         this.inputState={text: ''};
     }
@@ -26,33 +28,36 @@ export default class Profile extends React.Component {
             <View style={styles.container}>
                 <TextInput
                     style={{height: 40}}
-                    placeholder="Type here to translate!"
+                    placeholder="Add new interest!"
                     value={this.inputState.text}
                     onChangeText={(text) => {
                         this.setState({text});
                         this.inputState.text=text;
                         if(text.indexOf(" ")!=-1){
-                            this.initState.text+=text;
+                            this.setState({});
+                            this.initState.text.push(text);
                             this.inputState.text="";
-                            this.setState({})
                         }
                     }}
+                    onSubmitEditing={(event) => {
+                        this.setState({});
+                        this.initState.text.push(event.nativeEvent.text);
+                        this.inputState.text = "";
+                    }}
+
                 />
-                <Text style={styles.interestsList}>
-                    {this.initState.text + this.state.text.split(' ').map((word) => word).join(' ')}
-                </Text>
+                    <Interests data={this.initState.text} />
+
             </View>
         );
     }
 }
 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 10,
-    },
-    interestsLst: {
-        padding: 10,
-        fontSize: 12
     }
+
 });
