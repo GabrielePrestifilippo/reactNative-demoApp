@@ -1,28 +1,85 @@
-import React from 'react';
-import {
-    Text,
-    View,
-    Button
-} from 'react-native';
+'use strict';
 
-export default class Trending extends React.Component {
-    static navigationOptions = {
-        // Nav options can be defined as a function of the navigation prop:
-        title: ({ state }) => {
-            return `Trending`;
-        },
-        header: ({ state, setParams }) => {
+import React, { Component } from 'react';
+import {StyleSheet, Text, View, Image} from 'react-native';
 
-        },
-    };
+import SwipeCards from 'react-native-swipe-cards';
+
+let Card = React.createClass({
+    render() {
+        return (
+            <View style={[styles.card, {backgroundColor: this.props.backgroundColor}]}>
+                <Text>{this.props.text}</Text>
+            </View>
+        )
+    }
+})
+
+class NoMoreCards extends Component {
+    constructor(props) {
+        super(props);
+    }
 
     render() {
-        // The screen's current route is passed in to `props.navigation.state`:
-        const {params} = this.props.navigation.state;
         return (
             <View>
-                <Text>Chat with {1}</Text>
+                <Text style={styles.noMoreCardsText}>No more cards</Text>
             </View>
-        );
+        )
     }
 }
+
+const Cards = [
+    {text: 'Tomato', backgroundColor: 'red'},
+    {text: 'Aubergine', backgroundColor: 'purple'},
+    {text: 'Courgette', backgroundColor: 'green'},
+    {text: 'Blueberry', backgroundColor: 'blue'},
+    {text: 'Umm...', backgroundColor: 'cyan'},
+    {text: 'orange', backgroundColor: 'orange'},
+]
+
+export default class Trending extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.cards=Cards;
+    }
+
+    handleYup (card) {
+        console.log(`Yup for ${card.text}`)
+    }
+    handleNope (card) {
+        console.log(`Nope for ${card.text}`)
+    }
+    handleMaybe (card) {
+        console.log(`Maybe for ${card.text}`)
+    }
+    render() {
+        return (
+            <SwipeCards
+                cards={this.cards}
+
+                renderCard={(cardData) => <Card {...cardData} />}
+                renderNoMoreCards={() => <NoMoreCards />}
+
+                handleYup={this.handleYup}
+                handleNope={this.handleNope}
+                handleMaybe={this.handleMaybe}
+                hasMaybeAction
+            />
+        )
+    }
+}
+
+const styles = StyleSheet.create({
+    card: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 300,
+        height: 300,
+    },
+    noMoreCardsText: {
+        fontSize: 22,
+    }
+});

@@ -1,20 +1,11 @@
 import React from "react";
-import {
-    Text,
-    View,
-    Button,
-    ScrollView,
-    Image,
-    StyleSheet,
-    RefreshControl,
-    TouchableWithoutFeedback
-} from "react-native";
+import {Text, View, Button, ScrollView, Image, StyleSheet, RefreshControl, TouchableWithoutFeedback} from "react-native";
 
 
-export default class Influencer extends React.Component {
+export default class Post extends React.Component {
     static navigationOptions = {
         title: ({state}) => {
-            return `Influencer`;
+            return `InfluencerPosts`;
         },
     };
 
@@ -25,23 +16,23 @@ export default class Influencer extends React.Component {
 
     render() {
         const params = this.props;
-        const navigation = params.navigation;
+
 
         return (
-            <TouchableWithoutFeedback   style={styles.postContainer}
-                onPress={()=>navigation.navigate('InfluencerPosts', { user: 'Lucy', navigation: navigation })}>
-                <View style={styles.influencer}>
+            <TouchableWithoutFeedback>
+                <View
+                    style={styles.postContainer}>
                     <Text style={styles.name}>{this.props.name}</Text>
                     <View style={styles.imageContainer}>
                         <Image resizeMode='center' resizeMethod='scale' style={styles.profilePic}
-                               source={{uri:this.props.img}}
-
+                            //source={{uri:this.props.img}}
+                               source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
                         />
                     </View>
                     <View style={styles.subImage}>
                         <Text style={styles.number}>222 Followers</Text>
                         <View title="like" onPress={() => {
-                    }} style={styles.follow}><Text>F</Text></View>
+                    }} style={styles.like}><Text>L</Text></View>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -56,17 +47,6 @@ const styles = StyleSheet.create({
         marginRight: 20,
         marginBottom: 20,
         marginTop: 10,
-        flexDirection: 'row',
-
-    },
-    influencer: {
-        width:300,
-        marginLeft: 20,
-        marginRight: 20,
-        marginBottom: 20,
-        marginTop: 10,
-        flexDirection: 'column',
-
     },
     imageContainer: {
         height: 200,
@@ -77,8 +57,6 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     profilePic: {
-        width: '100%',
-        height: '100%',
         position: 'absolute',
     },
     subImage: {
@@ -97,7 +75,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fdff6e',
         borderBottomLeftRadius: 5
     },
-    follow: {
+    like: {
         flex: 1,
         backgroundColor: '#a2ffe2',
         borderBottomRightRadius: 5
