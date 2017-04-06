@@ -1,7 +1,8 @@
 import React from "react";
-import {Text, View, Button, ScrollView, Image, StyleSheet, RefreshControl} from "react-native";
+import {Text, View, Button, ScrollView, Image, StyleSheet, RefreshControl, Linking} from "react-native";
 import Influencer from "./Influencer";
 
+var token=undefined;
 export default class Influencers extends React.Component {
     static navigationOptions = {
         // Nav options can be defined as a function of the navigation prop:
@@ -13,11 +14,43 @@ export default class Influencers extends React.Component {
         },
     };
 
+    componentDidMount() {
+
+        if(!token) {
+            url = 'https://api.instagram.com/oauth/authorize/?client_id=' +
+                '7a02b45d3ddc41a9ac1033b95eb3244b&redirect_uri=http://muvias.eoapps.eu/ESTWA/redirect.html&response_type=code';
+            //cannot be here
+            Linking.openURL(url).catch(err => console.error('An error occurred', err));
+
+        }
+        //when instagram redirects me here
+        var url = Linking.getInitialURL().then((url) => {
+            if (url) {
+
+                token=1;
+                alert('Initial url is: ' + url);
+            }
+        }).catch(err => console.error('An error occurred', err));
+
+        Linking.addEventListener('url', this._handleOpenURL);
+    };
+
+    componentWillUnmount() {
+        Linking.removeEventListener('url', this._handleOpenURL);
+    };
+
+    _handleOpenURL(event) {
+        token=1;
+        console.log(event.url);
+        alert("handle"+event.url);
+    };
+
     constructor(props) {
         super(props);
         this.state = {
             refreshing: false,
         };
+
     }
 
     _onRefresh() {
@@ -28,6 +61,7 @@ export default class Influencers extends React.Component {
     render() {
         // The screen's current route is passed in to `props.navigation.state`:
         const {params} = this.props.navigation.state;
+        navigation = this.props.navigation;
         return (
             <ScrollView
                 refreshControl={

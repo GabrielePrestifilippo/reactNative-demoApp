@@ -17,7 +17,7 @@ export default class Influencer extends React.Component {
     render() {
         const {params} = this.props;
 
-        alert(JSON.stringify(this.props));
+        //alert(JSON.stringify(this.props));
         return (
             <View onPress={() => navigate('Profile', { user: 'Lucy' })} style={styles.postContainer}>
                 <Text style={styles.name}>{this.props.name}</Text>
