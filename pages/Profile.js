@@ -1,9 +1,11 @@
 import React from "react";
-import {Text, View, Button, TextInput, StyleSheet} from "react-native";
+import {Text, View, Button, TextInput, StyleSheet, Linking} from "react-native";
 
 import Interests from "./Interests";
 
+
 export default class Profile extends React.Component {
+
     static navigationOptions = {
         // Nav options can be defined as a function of the navigation prop:
         title: ({state}) => {
@@ -20,6 +22,7 @@ export default class Profile extends React.Component {
         this.state = {text: ''};
         this.inputState={text: ''};
     }
+
 
     render() {
         // The screen's current route is passed in to `props.navigation.state`:

@@ -1,48 +1,71 @@
 import React from "react";
-import {Text, View, Button, ScrollView, Image, StyleSheet, RefreshControl, Linking} from "react-native";
+import {Text, View, Button, ScrollView, Image, StyleSheet, RefreshControl, Linking, AsyncStorage} from "react-native";
 import Influencer from "./Influencer";
 
-var token=undefined;
+
+async function getToken(props, callback) {
+    let token = undefined;
+    try {
+        if (props && props.navigation && props.navigation.state &&
+            props.navigation.state.params && props.navigation.state.params.code) {
+            token = props.navigation.state.params.code;
+            callback(token);
+        } else {
+            token = await AsyncStorage.getItem('token', (err,result) => {
+                if (!result || typeof(result) == 'object') {
+                    props.navigation.navigate("Login", {navigation: props.navigation});
+                } else {
+                    callback(result);
+                }
+            });
+
+
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+}
+
+function getMedia(token) {
+    return fetch('https://api.instagram.com/v1/tags/nofilter/media/recent?access_token=' + token)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            return responseJson;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+
 export default class Influencers extends React.Component {
     static navigationOptions = {
-        // Nav options can be defined as a function of the navigation prop:
         title: ({state}) => {
             return `Influencers`;
         },
         header: ({state, setParams}) => {
-
         },
+    };
+
+    componentWillMount() {
+        let token = getToken(this.props, getMedia);
+
+
     };
 
     componentDidMount() {
 
-        if(!token) {
-            url = 'https://api.instagram.com/oauth/authorize/?client_id=' +
-                '7a02b45d3ddc41a9ac1033b95eb3244b&redirect_uri=http://muvias.eoapps.eu/ESTWA/redirect.html&response_type=code';
-            //cannot be here
-            Linking.openURL(url).catch(err => console.error('An error occurred', err));
-
-        }
-        //when instagram redirects me here
-        var url = Linking.getInitialURL().then((url) => {
-            if (url) {
-
-                token=1;
-                alert('Initial url is: ' + url);
-            }
-        }).catch(err => console.error('An error occurred', err));
-
-        Linking.addEventListener('url', this._handleOpenURL);
     };
 
     componentWillUnmount() {
-        Linking.removeEventListener('url', this._handleOpenURL);
+        //Linking.removeEventListener('url', this._handleOpenURL);
     };
 
     _handleOpenURL(event) {
-        token=1;
+        token = 1;
         console.log(event.url);
-        alert("handle"+event.url);
+        alert("handle" + event.url);
     };
 
     constructor(props) {
@@ -62,6 +85,7 @@ export default class Influencers extends React.Component {
         // The screen's current route is passed in to `props.navigation.state`:
         const {params} = this.props.navigation.state;
         navigation = this.props.navigation;
+
         return (
             <ScrollView
                 refreshControl={

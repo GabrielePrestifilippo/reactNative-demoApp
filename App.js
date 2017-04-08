@@ -5,6 +5,7 @@ import Profile from "./pages/Profile";
 import Influencers from "./pages/Influencers";
 import Trending from "./pages/Trending";
 import Influencer from "./pages/Influencer";
+import Login from "./pages/Login";
 
 const tabConfig = {
     tabBarPosition: 'bottom',
@@ -36,6 +37,22 @@ const myInfluencers = StackNavigator({
     },
     Influencer: {
         screen: Influencer,
+        navigationOptions: {
+            header: {
+                visible: false
+            }
+        }
+    },
+    Influencers: {
+        screen: Influencers,
+        navigationOptions: {
+            header: {
+                visible: false
+            }
+        }
+    },
+    Login: {
+        screen: Login,
         navigationOptions: {
             header: {
                 visible: false
