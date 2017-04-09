@@ -29,7 +29,9 @@ const styles = StyleSheet.create({
         padding: 10,
         position: 'relative',
         justifyContent: 'flex-start',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        flexWrap:'wrap',
+        flex:1
     },
     interest: {
         backgroundColor: "#98e7ff",
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         margin: 5,
+        height:30,
         flexDirection: 'row',
         justifyContent: 'flex-start',
 

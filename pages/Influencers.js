@@ -28,6 +28,8 @@ async function getToken(props, callback) {
 
 }
 
+
+
 function getMedia(token) {
     return fetch('https://api.instagram.com/v1/tags/nofilter/media/recent?access_token=' + token)
         .then((response) => response.json())
