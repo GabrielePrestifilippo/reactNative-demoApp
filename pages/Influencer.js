@@ -51,20 +51,19 @@ export default class Influencer extends React.Component {
 
 const styles = StyleSheet.create({
     postContainer: {
-        flex: 1,
-        marginLeft: 20,
-        marginRight: 20,
-        marginBottom: 20,
+        flex: 3,
         marginTop: 10,
         flexDirection: 'row',
+        justifyContent: 'flex-end'
 
     },
     influencer: {
-        width:300,
+        width:'40%',
         marginLeft: 20,
         marginRight: 20,
         marginBottom: 20,
         marginTop: 10,
+        alignSelf: 'flex-end',
         flexDirection: 'column',
 
     },
