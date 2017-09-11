@@ -1,14 +1,17 @@
 import React from "react";
 import {Text, View, Button, ScrollView, Image, StyleSheet, RefreshControl, Linking, AsyncStorage} from "react-native";
 import Influencer from "./Influencer";
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {NavigationActions} from 'react-navigation';
+import {setToken} from '../actions'
 
-
-async function getToken(props, callback) {
+async function getToken(navigation, callback) {
     let token = undefined;
     try {
         token = await AsyncStorage.getItem('token', (err, result) => {
             if (!result || typeof(result) == 'object') {
-                props.navigation.navigate("Login", {navigation: props.navigation});
+                navigation.dispatch({type: 'Login'});
             } else {
                 callback(result);
             }
@@ -21,7 +24,6 @@ async function getToken(props, callback) {
 
 }
 
-
 function getMedia(token) {
     return fetch('https://api.instagram.com/v1/tags/nofilter/media/recent?access_token=' + token)
         .then((response) => response.json())
@@ -33,12 +35,19 @@ function getMedia(token) {
         });
 }
 
-export default class Influencers extends React.Component {
+class Influencers extends React.Component {
+
+    navigation = this.props.navigation;
 
     componentWillMount() {
-        var token = this.props.code;
-        if (!token)
-            var token = getToken(getMedia);
+        this.state = {
+            token: this.props.code
+        };
+        if (!this.state.token) {
+            var token = getToken(navigation, getMedia);
+            this.setState({token: token});
+
+        }
         else
             getMedia(token);
 
@@ -102,6 +111,22 @@ export default class Influencers extends React.Component {
 
 }
 
+Influencers.propTypes = {
+    navigation: PropTypes.object.isRequired,
+
+};
+
+const mapStateToProps = state => ({
+    code: state.authReducer.token,
+});
+
+const mapDispatchToProps = dispatch => ({
+    goBack: () => dispatch(NavigationActions.back()),
+    setToken: (token) => dispatch(setToken(token)),
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Influencers);
 const styles = StyleSheet.create({
     postContainer: {
         flex: 1,
