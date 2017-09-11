@@ -6,28 +6,20 @@ import Influencer from "./Influencer";
 async function getToken(props, callback) {
     let token = undefined;
     try {
-        if (props && props.navigation && props.navigation.state &&
-            props.navigation.state.params && props.navigation.state.params.code) {
-            token = props.navigation.state.params.code;
-            callback(token);
-        } else {
-            token = await AsyncStorage.getItem('token', (err,result) => {
-                if (!result || typeof(result) == 'object') {
-                    props.navigation.navigate("Login", {navigation: props.navigation});
-                } else {
-                    callback(result);
-                }
-            });
+        token = await AsyncStorage.getItem('token', (err, result) => {
+            if (!result || typeof(result) == 'object') {
+                props.navigation.navigate("Login", {navigation: props.navigation});
+            } else {
+                callback(result);
+            }
+        });
 
-
-        }
     }
     catch (error) {
         console.log(error);
     }
 
 }
-
 
 
 function getMedia(token) {
@@ -42,16 +34,13 @@ function getMedia(token) {
 }
 
 export default class Influencers extends React.Component {
-    static navigationOptions = {
-        title: ({state}) => {
-            return `Influencers`;
-        },
-        header: ({state, setParams}) => {
-        },
-    };
 
     componentWillMount() {
-        let token = getToken(this.props, getMedia);
+        var token = this.props.code;
+        if (!token)
+            var token = getToken(getMedia);
+        else
+            getMedia(token);
 
 
     };

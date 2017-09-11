@@ -3,11 +3,6 @@ import {Text, View, Button, ScrollView, Image, StyleSheet, RefreshControl} from 
 
 
 export default class Influencer extends React.Component {
-    static navigationOptions = {
-        title: ({state}) => {
-            return `Influencer`;
-        },
-    };
 
     constructor(props) {
         super(props);
