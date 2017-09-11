@@ -4,6 +4,9 @@ import {Text, View, Button, ScrollView, Image, WebView, AsyncStorage} from "reac
 let started = false;
 export default class Login extends React.Component {
 
+    static navigationOptions = {
+        header: null,
+    };
 
     constructor(props) {
         super(props);

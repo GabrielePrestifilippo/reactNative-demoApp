@@ -1,5 +1,5 @@
 import React from "react";
-import {StackNavigator, addNavigationHelpers} from "react-navigation";
+import {StackNavigator, TabNavigator, addNavigationHelpers} from "react-navigation";
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import Profile from "../pages/Profile";
@@ -7,6 +7,7 @@ import Influencers from "../pages/Influencers";
 import Trending from "../pages/Trending";
 import Influencer from "../pages/Influencer";
 import Login from "../pages/Login";
+
 
 const tabConfig = {
     tabBarPosition: 'bottom',
@@ -23,40 +24,32 @@ const tabConfig = {
         },
     }
 };
-const tabs = TabNavigator({
+
+
+const HomeTabs = TabNavigator({
     Influencers: {screen: Influencers},
     Trending: {screen: Trending},
     Profile: {screen: Profile}
 }, tabConfig);
 
-export const AppNavigator = StackNavigator({
+export const AppNavigator = TabNavigator({
     Home: {
-        screen: tabs
+        screen: HomeTabs
     },
     Influencer: {
         screen: Influencer,
-        navigationOptions: {
-            header: {
-                visible: false
-            }
-        }
     },
     Influencers: {
         screen: Influencers,
-        navigationOptions: {
-            header: {
-                visible: false
-            }
-        }
     },
     Login: {
         screen: Login,
-        navigationOptions: {
-            header: {
-                visible: false
-            }
-        }
     }
+}, {
+    navigationOptions: {
+        tabBarVisible: false
+    },
+    swipeEnabled: false
 });
 
 

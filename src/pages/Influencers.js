@@ -11,7 +11,7 @@ async function getToken(navigation, callback) {
     try {
         token = await AsyncStorage.getItem('token', (err, result) => {
             if (!result || typeof(result) == 'object') {
-                navigation.dispatch({type: 'Login'});
+                dispatch(NavigationActions.navigate({routeName: 'Login'}))
             } else {
                 callback(result);
             }
