@@ -1,21 +1,14 @@
 import {combineReducers} from 'redux';
-import { NavigationActions } from 'react-navigation';
-import  {AppNavigator} from '../navigator/AppNavigator';
+import { ActionConst } from 'react-native-router-flux';
 
 
-const firstAction = AppNavigator.router.getActionForPathAndParams('Home');
-const initialNavState = AppNavigator.router.getStateForAction(firstAction);
-
-function nav(state = initialNavState, action) {
-    let nextState;
-    switch (action.type) {
-        default:
-            nextState = AppNavigator.router.getStateForAction(action, state);
-            break;
-    }
-
-    // Simply return the original `state` if `nextState` is null or undefined.
-    return nextState || state;
+const sceneReducer = (state = {}, {type, scene}) => {
+  switch(type){
+    case ActionConst.FOCUS:
+      return { ...state, scene };
+    default:
+      return state;
+  }
 }
 
 export function authReducer(state = {token: {}}, action) {
@@ -28,9 +21,8 @@ export function authReducer(state = {token: {}}, action) {
             return state;
     }
 };
-const AppReducer = combineReducers({
-    nav,
-    authReducer
-});
 
-export default AppReducer;
+export const appReducer = combineReducers({
+  sceneReducer,
+  authReducer
+});

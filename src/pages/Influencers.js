@@ -3,7 +3,7 @@ import {Text, View, Button, ScrollView, Image, StyleSheet, RefreshControl, Linki
 import Influencer from "./Influencer";
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {NavigationActions} from 'react-navigation';
+import {Actions} from 'react-native-router-flux';
 import {setToken} from '../actions'
 
 async function getToken(navigation, callback) {
@@ -11,7 +11,7 @@ async function getToken(navigation, callback) {
     try {
         token = await AsyncStorage.getItem('token', (err, result) => {
             if (!result || typeof(result) == 'object') {
-                dispatch(NavigationActions.navigate({routeName: 'Login'}))
+              Actions.login();
             } else {
                 callback(result);
             }
@@ -121,7 +121,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    goBack: () => dispatch(NavigationActions.back()),
+    goBack: () => Actions.back(),
     setToken: (token) => dispatch(setToken(token)),
 });
 
