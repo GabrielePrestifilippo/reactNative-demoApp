@@ -21,7 +21,8 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 
 
 EStyleSheet.build({
-  $textColor: '#0275d8'
+  $textColor: '#0275d8',
+
 })
 const store = createStore(appReducer)
 
@@ -30,17 +31,17 @@ const myInfluencers = () => {
     <Provider store={store}>
       <Router wrapBy={connect()}>
         <Scene key="root" hideNavBar={true} hideTabBar={true}>
-          <Scene key="tabbar" hideNavBar={true} tabs={true} tabBarPosition="bottom">
+          <Scene key="tabbar" swipeEnabled={false} hideNavBar={true} tabs={true} tabBarPosition="bottom">
             <Stack key='Influencers'>
-              <Scene key='InfluencersList' title='AppList' component={Influencers}/>
-              <Scene key='InfluencerPosts' title='AppList' component={InfluencerPosts}/>
+              <Scene key='InfluencersList' title='Influencers' component={Influencers}/>
+              <Scene key='InfluencerPosts' hideNavBar={true}  title='Last Photo' component={InfluencerPosts}/>
             </Stack>
-            <Scene key='Profile' title='AppList' component={Profile}/>
-            <Scene key='Trending' title='AppList' component={Trending}/>
+            <Scene key='Profile' title='My Profile' component={Profile}/>
+            <Scene key='Trending' title='Trending' component={Trending}/>
           </Scene>
 
           <Scene key="stack" hideNavBar={false} hideTabBar={false}>
-            <Scene key='Login' title='AppList' component={Login}/>
+            <Scene key='Login' title='Login' component={Login}/>
           </Scene>
 
         </Scene>
