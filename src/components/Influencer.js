@@ -1,19 +1,20 @@
 import React from 'react'
-import { Image, View} from 'react-native'
-import {Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right} from 'native-base'
+import { Image, View } from 'react-native'
+import { Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import {Actions} from 'react-native-router-flux'
+import { Actions } from 'react-native-router-flux'
+
 export default class Influencer extends React.Component {
 
-  constructor(props) {
+  constructor (props) {
     super(props)
   }
 
-  onNamePress() {
+  onNamePress () {
     Actions.InfluencerPosts(1)
   }
 
-  render() {
+  render () {
     const {params} = this.props
 
     //alert(JSON.stringify(this.props));
@@ -22,34 +23,37 @@ export default class Influencer extends React.Component {
         <Content>
           <Card>
 
-            <CardItem button={true} onPress={()=>{this.onNamePress()}} >
+            <CardItem button={true} onPress={() => {this.onNamePress()}}>
               <Left>
                 <Thumbnail style={styles.thumbnail} source={{uri: this.props.img}} />
                 <Body>
-                  <Text>{this.props.name}</Text>
-                  <Text note={true}>{this.props.name}</Text>
+                <Text>{this.props.name}</Text>
+                <Text note={true}>{this.props.name}</Text>
                 </Body>
               </Left>
             </CardItem>
 
-            <CardItem cardBody={true}>
+            <CardItem button cardBody={true} onPress={() => {this.onNamePress()}}>
               <Image source={{uri: this.props.img}} style={{height: 200, width: null, flex: 1}} />
             </CardItem>
             <CardItem>
               <Left>
                 <Button transparent={true}>
                   <Icon active={true} name="thumbs-up" />
-                  <Text>12 Likes</Text>
+                  <Text>12</Text>
                 </Button>
               </Left>
               <Body>
-                <Button transparent={true}>
-                  <Icon active={true} name="chatbubbles" />
-                  <Text style={styles.text}>4 Comments</Text>
-                </Button>
+              <Button style={styles.button} transparent={true}>
+                <Icon active={true} name="chatbubbles" />
+                <Text style={styles.text}>4</Text>
+              </Button>
               </Body>
               <Right>
-                <Text style={styles.text}>222 Followers</Text>
+                <Button transparent={true}>
+                  <Icon active={true} name="chatbubbles" />
+                  <Text style={styles.text}>222</Text>
+                </Button>
               </Right>
             </CardItem>
           </Card>
@@ -61,11 +65,15 @@ export default class Influencer extends React.Component {
 const styles = EStyleSheet.create({
   text: {
     color: '$textColor',
-    fontSize: 10,
-    textAlign: 'left'
+    fontSize: 14,
+    textAlign: 'left',
+
   },
   thumbnail: {
     width: 40,
     height: 40
+  },
+  button: {
+    alignSelf: 'center'
   }
 })
