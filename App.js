@@ -36,8 +36,9 @@ const myInfluencers = () => {
               <Scene key='InfluencersList' title='Influencers' component={Influencers}/>
               <Scene key='InfluencerPosts' hideNavBar={true}  title='Last Photo' component={InfluencerPosts}/>
             </Stack>
+            <Scene  key='Trending' title='Trending' component={Trending}/>
             <Scene key='Profile' title='My Profile' component={Profile}/>
-            <Scene key='Trending' title='Trending' component={Trending}/>
+
           </Scene>
 
           <Scene key="stack" hideNavBar={false} hideTabBar={false}>
