@@ -11,7 +11,7 @@ const sceneReducer = (state = {}, {type, scene}) => {
   }
 }
 
-export function authReducer(state = {token: {}}, action) {
+export function authReducer(state = {token: null}, action) {
     var token = {...state.token};
     switch (action.type) {
         case 'setToken':
