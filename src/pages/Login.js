@@ -26,7 +26,7 @@ export default class Login extends React.Component {
                   const code = webViewState.nativeEvent.url.split('access_token=')[1]
                   await AsyncStorage.removeItem('token', async () => {
                     await AsyncStorage.setItem('token', code, () => {
-                      navigation.navigate('Influencers', {code})
+                      setTimeout(()=>{ navigation.navigate('Influencers', {code})},1000)
                     })
                   })
 
@@ -45,7 +45,8 @@ export default class Login extends React.Component {
                   const code = webViewState.nativeEvent.url.split('access_token=')[1]
                   await AsyncStorage.removeItem('token', async () => {
                     await AsyncStorage.setItem('token', code, () => {
-                      navigation.navigate('Influencers', {code})
+                      setTimeout(()=>{ navigation.navigate('Influencers', {code})},1000)
+
                     })
                   })
 
@@ -58,7 +59,7 @@ export default class Login extends React.Component {
 
           }}
           source={{
-            uri: 'https://www.instagram.com/oauth/authorize/?client_id=7a02b45d3ddc41a9ac1033b95eb3244b&redirect_uri=http://muvias.eoapps.eu&response_type=token&scope=basic+public_content'
+            uri: 'https://www.instagram.com/oauth/authorize/?client_id=7a02b45d3ddc41a9ac1033b95eb3244b&redirect_uri=http://muvias.eoapps.eu/loading.html&response_type=token&scope=basic+public_content'
           }}
         />
       )
