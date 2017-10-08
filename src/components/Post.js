@@ -1,26 +1,34 @@
 import React from 'react'
-import { Image, View} from 'react-native'
-import {Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right} from 'native-base'
+import { Image, View, Linking } from 'react-native'
+import { Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import {Actions} from 'react-native-router-flux'
+import { Actions } from 'react-native-router-flux'
+
 export default class Post extends React.Component {
 
-  constructor(props) {
+  constructor (props) {
     super(props)
   }
 
-  onNamePress() {
-   // Actions.InfluencerPosts(1)
+  onNamePress () {
+    // Actions.InfluencerPosts(1)
   }
 
-  render() {
+  openLink () {
+
+    //Linking.openURL('http://instagram.com/_u/gabry501/#Intent;package=com.instagram.android;scheme=https').catch(err => console.error('e', err));
+    Linking.openURL('android-app://com.instagram.android/https/instagram.com/p/BYI7mzwFc1W').catch(err => console.error('e', err))
+//IOS instagram://media?id=1587781020299939158
+  }
+
+  render () {
     const {params} = this.props
 
     return (
       <View>
         <Content>
           <Card>
-            <CardItem cardBody={true}>
+            <CardItem button cardBody={true} onPress={() => this.openLink()}>
               <Image source={{uri: this.props.img}} style={{height: 200, width: null, flex: 1}} />
             </CardItem>
             <CardItem>
@@ -37,7 +45,10 @@ export default class Post extends React.Component {
               </Button>
               </Body>
               <Right>
-                <Text style={styles.text}>222</Text>
+                <Button transparent={true}>
+                  <Icon active={true} name="people" />
+                  <Text style={styles.text}>222</Text>
+                </Button>
               </Right>
             </CardItem>
           </Card>
