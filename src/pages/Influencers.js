@@ -8,12 +8,12 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import {setToken} from '../actions'
 
 
-async function getToken(navigation, callback) {
+async function getToken(callback) {
   let token = undefined
   try {
     token = await AsyncStorage.getItem('token', (err, result) => {
       if (!result || typeof(result) == 'object') {
-        Actions.login()
+        Actions.Login()
       } else {
         callback(result)
       }
@@ -42,18 +42,19 @@ class Influencers extends React.Component {
   navigation = this.props.navigation
 
   componentWillMount() {
-    /*
+/*
     this.state = {
       token: this.props.code
     }
     if (!this.state.token) {
-      var token = getToken(navigation, getMedia)
+      var token = getToken(getMedia)
       this.setState({token})
 
     }
     else
-      getMedia(token)
-*/
+      getMedia(this.state.token)
+
+    */
 
   }
 
@@ -93,7 +94,7 @@ class Influencers extends React.Component {
         refreshControl={
           <RefreshControl
             colors={['#ee001c', '#EE0EAE', '#511AEE']}
-            refreshing={this.state.refreshing}
+            refreshing={this.state.refreshing || false}
             onRefresh={this._onRefresh.bind(this)}
           />
         }

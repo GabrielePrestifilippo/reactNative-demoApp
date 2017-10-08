@@ -1,15 +1,34 @@
 import React from 'react'
-import {Text, View, Button, TextInput, StyleSheet, Linking, AsyncStorage} from 'react-native'
+import { TextInput, StyleSheet, Linking, AsyncStorage } from 'react-native'
 import Interests from '../components/Interests'
+import PopularityBar from '../components/PopularityBar'
+import {
+  Container,
+  Header,
+  View,
+  DeckSwiper,
+  Card,
+  CardItem,
+  Item,
+  Label,
+  Thumbnail,
+  Text,
+  Left,
+  Body,
+  Right,
+  Icon,
+  Content,
+  Footer
+} from 'native-base'
 
+const tags = []
 
-const tags=[]
-function getProfile(callback) {
-  AsyncStorage.getItem('myTags', async(err, result) => {
+function getProfile (callback) {
+  AsyncStorage.getItem('myTags', async (err, result) => {
     if (!result) {
       AsyncStorage.getItem('token', (e, res) => {
         if (res) {
-          getTags(res,callback)
+          getTags(res, callback)
         }
       })
     } else {
@@ -18,7 +37,7 @@ function getProfile(callback) {
   })
 }
 
-function getTags(token,callback) {
+function getTags (token, callback) {
   fetch('https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token + '&count=10')
     .then((response) => response.json())
     .then((responseJson) => {
@@ -34,7 +53,7 @@ function getTags(token,callback) {
         return counts[b] - counts[a]
       })
       sorted = sorted.splice(0, 10)
-      tags=sorted
+      tags = sorted
       AsyncStorage.setItem('myTags', JSON.stringify(tags))
       callback(tags)
     })
@@ -43,64 +62,62 @@ function getTags(token,callback) {
     })
 }
 
-
 export default class Profile extends React.Component {
 
-
-  constructor(props) {
+  constructor (props) {
     super(props)
-    this.state={
-      text:'',
-      inputState:'',
-      initTags:tags
+    this.state = {
+      text: '',
+      inputState: '',
+      initTags: tags
     }
 
   }
 
-
-  componentWillMount() {
+  componentWillMount () {
     //this.setState({ showLoading: true});
-    var self=this
-    getProfile(function(res){
+    var self = this
+    getProfile(function (res) {
       self.setState({initTags: res})
     })
 
   }
 
-  render() {
+  render () {
     // The screen's current route is passed in to `props.navigation.state`:
     const {params} = this.props.navigation.state
     return (
       <View style={styles.container}>
-        <TextInput
-          style={{height: 40}}
-          placeholder="Add new interest!"
-          value={this.state.inputState}
-          onChangeText={(text) => {
-            this.setState({text})
-            this.setState({inputState:text})
-            if (text.indexOf(' ') != -1) {
-              this.setState({text:''})
-              const newTags=this.state.initTags.concat(text)
-              this.setState({initTags:newTags})
-              this.setState({inputState:''})
-            }
-          }}
-          onSubmitEditing={async (event) => {
-            this.setState({text:''})
-            const newTags=this.state.initTags.concat(event.nativeEvent.text)
-            this.setState({initTags:newTags})
-            this.setState({inputState:''})
-            await AsyncStorage.setItem('myTags', JSON.stringify(newTags))
-          }}
-        />
-        <Interests data={this.state.initTags} />
-
+        <Card>
+          <TextInput
+            style={{height: 40}}
+            placeholder="Add new interest!"
+            value={this.state.inputState}
+            onChangeText={(text) => {
+              this.setState({text})
+              this.setState({inputState: text})
+              if (text.indexOf(' ') != -1) {
+                this.setState({text: ''})
+                const newTags = this.state.initTags.concat(text)
+                this.setState({initTags: newTags})
+                this.setState({inputState: ''})
+              }
+            }}
+            onSubmitEditing={async (event) => {
+              this.setState({text: ''})
+              const newTags = this.state.initTags.concat(event.nativeEvent.text)
+              this.setState({initTags: newTags})
+              this.setState({inputState: ''})
+              await AsyncStorage.setItem('myTags', JSON.stringify(newTags))
+            }}
+          />
+          <Interests data={this.state.initTags} />
+        </Card>
+        <PopularityBar />
       </View>
     )
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {

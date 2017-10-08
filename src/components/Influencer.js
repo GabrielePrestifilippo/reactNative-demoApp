@@ -51,7 +51,7 @@ export default class Influencer extends React.Component {
               </Body>
               <Right>
                 <Button transparent={true}>
-                  <Icon active={true} name="chatbubbles" />
+                  <Icon active={true} name="people" />
                   <Text style={styles.text}>222</Text>
                 </Button>
               </Right>

@@ -1,47 +1,106 @@
 import React from 'react'
-import { Image, View} from 'react-native'
-import {Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right} from 'native-base'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import {Actions} from 'react-native-router-flux'
-export default class Post extends React.Component {
+import { Actions } from 'react-native-router-flux'
+import { Image, Modal, Dimensions, TouchableHighlight } from 'react-native'
+import {
+  Container,
+  Header,
+  View,
+  DeckSwiper,
+  Card,
+  CardItem,
+  Item,
+  Label,
+  Thumbnail,
+  Text,
+  Left,
+  Body,
+  Right,
+  Icon,
+  Content,
+  Footer
+} from 'native-base'
 
-  constructor(props) {
+import * as Progress from 'react-native-progress'
+var {height, width} = Dimensions.get('window')
+export default class PopularityBar extends React.Component {
+
+  constructor (props) {
     super(props)
   }
 
-  onNamePress() {
-   // Actions.InfluencerPosts(1)
+  state = {
+    modalVisible: false,
   }
 
-  render() {
+  setModalVisible (visible) {
+    this.setState({modalVisible: visible})
+  }
+
+  hideModal (visible) {
+    this.setState({modalVisible: false})
+  }
+
+  onNamePress () {
+    // Actions.InfluencerPosts(1)
+  }
+
+  render () {
     const {params} = this.props
 
     return (
-      <View>
-        <Content>
-          <Card>
-            <CardItem cardBody={true}>
-              <Image source={{uri: this.props.img}} style={{height: 200, width: null, flex: 1}} />
-            </CardItem>
-            <CardItem>
-              <Left>
-                <Button transparent={true}>
-                  <Icon active={true} name="thumbs-up" />
-                  <Text>12</Text>
-                </Button>
-              </Left>
-              <Body>
-              <Button transparent={true}>
-                <Icon active={true} name="chatbubbles" />
-                <Text style={styles.text}>4</Text>
-              </Button>
-              </Body>
-              <Right>
-                <Text style={styles.text}>222</Text>
-              </Right>
-            </CardItem>
-          </Card>
-        </Content>
+      <View style={{ height: 100,}}>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {this.hideModal()}}
+        >
+          <View onPress={() => {this.hideModal()}} style={{marginTop: 22}}>
+            <View>
+              <Text>Hello World!</Text>
+
+              <TouchableHighlight onPress={() => {
+                this.setModalVisible(!this.state.modalVisible)
+              }}>
+                <Text>Hide Modal</Text>
+              </TouchableHighlight>
+
+            </View>
+          </View>
+        </Modal>
+        <Card style={{
+          flex: 1,
+
+          flexDirection: 'column',
+          alignSelf: 'center',
+          top: 0,
+          position: 'relative',
+          alignContent: 'flex-start',
+        }}
+        >
+          <CardItem
+            button
+            onPress={() => {
+              this.setModalVisible(true)
+            }}>
+            <Left>
+              <Label style={{textAlign: 'left', color: 'black'}}>Popularity</Label>
+            </Left>
+            <Right>
+              <Label>Find More</Label>
+            </Right>
+          </CardItem>
+
+          <CardItem>
+            <Progress.Bar style={{backgroundColor: '#eeee'}}
+                          borderRadius={0} borderWidth={0}
+                          width={width * 89 / 100}
+                          progress={0.3} />
+          </CardItem>
+
+        </Card>
+
       </View>
     )
   }
