@@ -104,7 +104,6 @@ export default class Profile extends React.Component {
   }
 
   render() {
-    const {params} = this.props.navigation.state
     return (
       <Content style={styles.container}>
         <Card>

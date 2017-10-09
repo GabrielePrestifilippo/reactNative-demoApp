@@ -2,7 +2,7 @@ import React from 'react'
 import { Image, View, Linking } from 'react-native'
 import { Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { Actions } from 'react-native-router-flux'
+
 
 export default class Post extends React.Component {
 

@@ -16,7 +16,7 @@ import {
   Right
 } from 'native-base'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { Actions } from 'react-native-router-flux'
+
 
 export default class HeaderPost extends React.Component {
 
@@ -25,7 +25,7 @@ export default class HeaderPost extends React.Component {
   }
 
   onClose () {
-    Actions.pop()
+    this.props.navigator.pop()
   }
 
   openLink () {

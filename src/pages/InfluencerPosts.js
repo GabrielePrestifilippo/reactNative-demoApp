@@ -2,7 +2,6 @@ import React from 'react'
 import {View, BackHandler, ScrollView, StyleSheet} from 'react-native'
 import Post from '../components/Post'
 import HeaderPost from '../components/HeaderPost'
-import {Actions} from 'react-native-router-flux'
 
 export default class InfluencerPosts extends React.Component {
 
@@ -19,7 +18,7 @@ export default class InfluencerPosts extends React.Component {
   }
 
   onBackPress = () => {
-    Actions.pop()
+    this.props.navigator.pop()
   }
 
   render() {
@@ -30,6 +29,7 @@ export default class InfluencerPosts extends React.Component {
         <HeaderPost
           name="Gabriele"
           img='https://i.vimeocdn.com/portrait/6193893_640x640'
+          navigator={this.props.navigator}
         />
         <ScrollView>
 

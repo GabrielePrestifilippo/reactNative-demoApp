@@ -3,17 +3,17 @@ import {ScrollView, RefreshControl, AsyncStorage} from 'react-native'
 import Influencer from '../components/Influencer'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Actions} from 'react-native-router-flux'
+
 import EStyleSheet from 'react-native-extended-stylesheet'
 import {setToken} from '../actions'
 
 
-async function getToken(callback) {
+async function getToken(navigator, callback) {
   let token = undefined
   try {
     token = await AsyncStorage.getItem('token', (err, result) => {
       if (!result || typeof(result) == 'object') {
-        Actions.Login()
+        navigator.push({screen: 'myInfluencer.Login'})
       } else {
         callback(result)
       }
@@ -39,15 +39,14 @@ function getMedia(token) {
 
 class Influencers extends React.Component {
 
-  navigation = this.props.navigation
-
   componentWillMount() {
     /*
         this.state = {
           token: this.props.code
         }
+        var navigator=this.props.navigator;
         if (!this.state.token) {
-          var token = getToken(getMedia)
+          var token = getToken(navigator, getMedia)
           this.setState({token})
 
         }
@@ -59,7 +58,6 @@ class Influencers extends React.Component {
   }
 
   componentDidMount() {
-
   }
 
   componentWillUnmount() {
@@ -76,7 +74,6 @@ class Influencers extends React.Component {
     this.state = {
       refreshing: false
     }
-
   }
 
   _onRefresh() {
@@ -85,10 +82,6 @@ class Influencers extends React.Component {
   }
 
   render() {
-    // The screen's current route is passed in to `props.navigation.state`:
-    const {params} = this.props.navigation.state
-    navigation = this.props.navigation
-
     return (
       <ScrollView
         refreshControl={
@@ -102,10 +95,12 @@ class Influencers extends React.Component {
         <Influencer
           name="Pippo"
           img="https://i.vimeocdn.com/portrait/6193893_640x640"
+          navigator={this.props.navigator}
         />
         <Influencer
           name="Pippo1"
           img="https://i.vimeocdn.com/portrait/6193893_640x640"
+          navigator={this.props.navigator}
         />
       </ScrollView>
     )
@@ -114,10 +109,6 @@ class Influencers extends React.Component {
 
 }
 
-Influencers.propTypes = {
-  navigation: PropTypes.object.isRequired
-
-}
 
 const mapStateToProps = state => ({
   code: state.authReducer.token

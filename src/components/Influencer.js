@@ -2,7 +2,7 @@ import React from 'react'
 import {Image, View} from 'react-native'
 import {Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right} from 'native-base'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import {Actions} from 'react-native-router-flux'
+
 
 export default class Influencer extends React.Component {
 
@@ -11,7 +11,7 @@ export default class Influencer extends React.Component {
   }
 
   onNamePress() {
-    Actions.InfluencerPosts(1)
+    this.props.navigator.push({screen: 'myInfluencer.InfluencerPosts'})
   }
 
   render() {

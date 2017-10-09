@@ -1,6 +1,5 @@
 import React from 'react'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import {Actions} from 'react-native-router-flux'
 import {Modal, Dimensions, TouchableHighlight} from 'react-native'
 import {View, Card, CardItem, Text, Left, Right, Label} from 'native-base'
 

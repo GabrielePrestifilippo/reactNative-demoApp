@@ -1,53 +1,57 @@
-import React from 'react'
-import {AppRegistry, Text, View, Button, Linking} from 'react-native'
-import {createStore} from 'redux'
-import {
-  Scene,
-  Router,
-  Stack
-} from 'react-native-router-flux'
+import React, {Component} from 'react'
+import {Provider} from 'react-redux'
+import {Navigation} from 'react-native-navigation'
+import {registerScreens} from './src/screens'
 
-import {appReducer} from './src/reducers'
-import {Provider, connect} from 'react-redux'
-import Profile from './src/pages/Profile'
-import Influencers from './src/pages/Influencers'
-import Trending from './src/pages/Trending'
-import InfluencerPosts from './src/pages/InfluencerPosts'
-import Login from './src/pages/Login'
-import EStyleSheet from 'react-native-extended-stylesheet'
-import CustomTabBarComponent from './src/components/CustomTabBarComponent'
+import configureStore from './src/store/configureStore'
 
-EStyleSheet.build({
-  $textColor: '#0275d8'
-})
+const store = configureStore()
 
-const store = createStore(appReducer)
+registerScreens(store, Provider)
 
-const myInfluencers = () => {
-  return (
-    <Provider store={store}>
-      <Router wrapBy={connect()}>
-        <Scene key="root" hideNavBar={true} hideTabBar={true}>
-          <Scene key="tabbar">
-            swipeEnabled={false} hideNavBar={true} tabs={true} tabBarPosition="bottom">
-            <Stack key='Influencers'>
-              <Scene key='InfluencersList' title='Influencers' component={Influencers}/>
-              <Scene key='InfluencerPosts' hideNavBar={true} title='Last Photo' component={InfluencerPosts}/>
-            </Stack>
-            <Scene key='Trending' title='Trending' component={Trending}/>
-            <Scene key='Profile' title='My Profile' component={Profile}/>
-
-          </Scene>
-
-          <Scene key="stack" hideNavBar={false} hideTabBar={false}>
-            <Scene key='Login' title='Login' component={Login}/>
-          </Scene>
-
-        </Scene>
-      </Router>
-    </Provider>
-  )
+const navigatorStyle = {
+  statusBarColor: '#831d19',
+  navigationBarColor: '#339999',
+  navBarBackgroundColor: '#339999',
+  navBarTextColor: '#ffffff',
+  navBarButtonColor: '#ffffff',
+  statusBarTextColorScheme: 'light',
+  navBarHidden: false,
+  tabBarButtonColor: 'red',
+  tabBarSelectedButtonColor: 'green',
+  tabBarBackgroundColor: 'blue'
 }
 
-AppRegistry.registerComponent('myInfluencers', () => myInfluencers)
-export default myInfluencers
+
+Navigation.startTabBasedApp({
+  tabs: [
+    {
+      label: 'Influencers',
+      screen: 'myInfluencer.Influencers',
+      icon: 'ios-person',
+      selectedIcon: 'ios-person',
+      title: 'Hello World',
+      navigatorStyle
+    },
+    {
+      label: 'Trending',
+      screen: 'myInfluencer.Trending',
+      icon: 'ios-person',
+      selectedIcon: 'ios-person',
+      title: 'Hello World',
+      navigatorStyle
+    },
+    {
+      label: 'Profile',
+      screen: 'myInfluencer.Profile',
+      icon: 'ios-person',
+      selectedIcon: 'ios-person',
+      title: 'Hello World',
+      navigatorStyle
+    }
+  ],
+  tabsStyle: {},
+
+  animationType: 'slide-down'
+
+})
