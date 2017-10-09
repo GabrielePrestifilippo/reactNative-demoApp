@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, Button, ScrollView, Image, WebView, AsyncStorage} from 'react-native'
+import {WebView, AsyncStorage} from 'react-native'
 
 let started = false
 export default class Login extends React.Component {

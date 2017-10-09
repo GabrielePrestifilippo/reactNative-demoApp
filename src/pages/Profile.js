@@ -1,29 +1,12 @@
 import React from 'react'
-import { TextInput, StyleSheet, Linking, AsyncStorage } from 'react-native'
+import {TextInput, StyleSheet, AsyncStorage} from 'react-native'
 import Interests from '../components/Interests'
 import PopularityBar from '../components/PopularityBar'
-import {
-  Container,
-  Header,
-  View,
-  DeckSwiper,
-  Card,
-  CardItem,
-  Item,
-  Label,
-  Thumbnail,
-  Text,
-  Left,
-  Body,
-  Right,
-  Icon,
-  Content,
-  Footer
-} from 'native-base'
+import {View, Card} from 'native-base'
 
 const tags = []
 
-function getProfile (callback) {
+function getProfile(callback) {
   AsyncStorage.getItem('myTags', async (err, result) => {
     if (!result) {
       AsyncStorage.getItem('token', (e, res) => {
@@ -37,7 +20,7 @@ function getProfile (callback) {
   })
 }
 
-function getTags (token, callback) {
+function getTags(token, callback) {
   fetch('https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token + '&count=10')
     .then((response) => response.json())
     .then((responseJson) => {
@@ -64,7 +47,7 @@ function getTags (token, callback) {
 
 export default class Profile extends React.Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       text: '',
@@ -74,7 +57,7 @@ export default class Profile extends React.Component {
 
   }
 
-  componentWillMount () {
+  componentWillMount() {
     //this.setState({ showLoading: true});
     var self = this
     getProfile(function (res) {
@@ -83,7 +66,7 @@ export default class Profile extends React.Component {
 
   }
 
-  render () {
+  render() {
     // The screen's current route is passed in to `props.navigation.state`:
     const {params} = this.props.navigation.state
     return (
@@ -111,9 +94,9 @@ export default class Profile extends React.Component {
               await AsyncStorage.setItem('myTags', JSON.stringify(newTags))
             }}
           />
-          <Interests data={this.state.initTags} />
+          <Interests data={this.state.initTags}/>
         </Card>
-        <PopularityBar />
+        <PopularityBar/>
       </View>
     )
   }

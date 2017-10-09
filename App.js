@@ -21,7 +21,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 
 
 EStyleSheet.build({
-  $textColor: '#0275d8',
+  $textColor: '#0275d8'
 
 })
 const store = createStore(appReducer)
@@ -34,9 +34,9 @@ const myInfluencers = () => {
           <Scene key="tabbar" swipeEnabled={false} hideNavBar={true} tabs={true} tabBarPosition="bottom">
             <Stack key='Influencers'>
               <Scene key='InfluencersList' title='Influencers' component={Influencers}/>
-              <Scene key='InfluencerPosts' hideNavBar={true}  title='Last Photo' component={InfluencerPosts}/>
+              <Scene key='InfluencerPosts' hideNavBar={true} title='Last Photo' component={InfluencerPosts}/>
             </Stack>
-            <Scene  key='Trending' title='Trending' component={Trending}/>
+            <Scene key='Trending' title='Trending' component={Trending}/>
             <Scene key='Profile' title='My Profile' component={Profile}/>
 
           </Scene>

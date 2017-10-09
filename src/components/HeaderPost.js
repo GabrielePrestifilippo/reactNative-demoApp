@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import { Image, View, TouchableOpacity, Linking } from 'react-native'
+import { View, TouchableOpacity, Linking } from 'react-native'
 import {
   Container,
   Content,

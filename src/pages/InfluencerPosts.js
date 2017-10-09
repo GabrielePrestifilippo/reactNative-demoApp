@@ -1,20 +1,20 @@
 import React from 'react'
-import { Text, View, Button, BackHandler, ScrollView, Image, StyleSheet, RefreshControl } from 'react-native'
+import {View, BackHandler, ScrollView, StyleSheet} from 'react-native'
 import Post from '../components/Post'
 import HeaderPost from '../components/HeaderPost'
-import { Actions } from 'react-native-router-flux'
+import {Actions} from 'react-native-router-flux'
 
 export default class InfluencerPosts extends React.Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.props.backAndroidHandler || this.onBackPress)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.props.backAndroidHandler || this.onBackPress)
   }
 
@@ -22,11 +22,11 @@ export default class InfluencerPosts extends React.Component {
     Actions.pop()
   }
 
-  render () {
+  render() {
     const params = this.props
 
     return (
-      <View >
+      <View>
         <HeaderPost
           name="Gabriele"
           img='https://i.vimeocdn.com/portrait/6193893_640x640'

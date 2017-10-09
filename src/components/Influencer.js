@@ -1,20 +1,20 @@
 import React from 'react'
-import { Image, View } from 'react-native'
-import { Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base'
+import {Image, View} from 'react-native'
+import {Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right} from 'native-base'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { Actions } from 'react-native-router-flux'
+import {Actions} from 'react-native-router-flux'
 
 export default class Influencer extends React.Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props)
   }
 
-  onNamePress () {
+  onNamePress() {
     Actions.InfluencerPosts(1)
   }
 
-  render () {
+  render() {
     const {params} = this.props
 
     //alert(JSON.stringify(this.props));
@@ -22,10 +22,11 @@ export default class Influencer extends React.Component {
       <View>
         <Content>
           <Card>
-
-            <CardItem button={true} onPress={() => {this.onNamePress()}}>
+            <CardItem button={true} onPress={() => {
+              this.onNamePress()
+            }}>
               <Left>
-                <Thumbnail style={styles.thumbnail} source={{uri: this.props.img}} />
+                <Thumbnail style={styles.thumbnail} source={{uri: this.props.img}}/>
                 <Body>
                 <Text>{this.props.name}</Text>
                 <Text note={true}>{this.props.name}</Text>
@@ -33,25 +34,27 @@ export default class Influencer extends React.Component {
               </Left>
             </CardItem>
 
-            <CardItem button cardBody={true} onPress={() => {this.onNamePress()}}>
-              <Image source={{uri: this.props.img}} style={{height: 200, width: null, flex: 1}} />
+            <CardItem button cardBody={true} onPress={() => {
+              this.onNamePress()
+            }}>
+              <Image source={{uri: this.props.img}} style={{height: 200, width: null, flex: 1}}/>
             </CardItem>
             <CardItem>
               <Left>
                 <Button transparent={true}>
-                  <Icon active={true} name="thumbs-up" />
+                  <Icon active={true} name="thumbs-up"/>
                   <Text>12</Text>
                 </Button>
               </Left>
               <Body>
               <Button style={styles.button} transparent={true}>
-                <Icon active={true} name="chatbubbles" />
+                <Icon active={true} name="chatbubbles"/>
                 <Text style={styles.text}>4</Text>
               </Button>
               </Body>
               <Right>
                 <Button transparent={true}>
-                  <Icon active={true} name="people" />
+                  <Icon active={true} name="people"/>
                   <Text style={styles.text}>222</Text>
                 </Button>
               </Right>
@@ -66,7 +69,7 @@ const styles = EStyleSheet.create({
   text: {
     color: '$textColor',
     fontSize: 14,
-    textAlign: 'left',
+    textAlign: 'left'
 
   },
   thumbnail: {

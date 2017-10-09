@@ -1,62 +1,50 @@
 import React from 'react'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { Actions } from 'react-native-router-flux'
-import { Image, Modal, Dimensions, TouchableHighlight } from 'react-native'
-import {
-  Container,
-  Header,
-  View,
-  DeckSwiper,
-  Card,
-  CardItem,
-  Item,
-  Label,
-  Thumbnail,
-  Text,
-  Left,
-  Body,
-  Right,
-  Icon,
-  Content,
-  Footer
-} from 'native-base'
+import {Actions} from 'react-native-router-flux'
+import {Modal, Dimensions, TouchableHighlight} from 'react-native'
+import {View, Card, CardItem, Left, Right, Label} from 'native-base'
 
 import * as Progress from 'react-native-progress'
+
 var {height, width} = Dimensions.get('window')
 export default class PopularityBar extends React.Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props)
   }
 
   state = {
-    modalVisible: false,
+    modalVisible: false
   }
 
-  setModalVisible (visible) {
+  setModalVisible(visible) {
     this.setState({modalVisible: visible})
   }
 
-  hideModal (visible) {
+  hideModal(visible) {
     this.setState({modalVisible: false})
   }
 
-  onNamePress () {
+  onNamePress() {
     // Actions.InfluencerPosts(1)
   }
 
-  render () {
+  render() {
     const {params} = this.props
 
     return (
-      <View style={{ height: 100,}}>
+      <View style={{height: 100}}>
         <Modal
           animationType="slide"
           transparent={false}
           visible={this.state.modalVisible}
-          onRequestClose={() => {this.hideModal()}}
+          onRequestClose={() => {
+            this.hideModal()
+          }}
         >
-          <View onPress={() => {this.hideModal()}} style={{marginTop: 22}}>
+          <View onPress={() => {
+            this.hideModal()
+          }} style={{marginTop: 22}}>
             <View>
               <Text>Hello World!</Text>
 
@@ -76,7 +64,7 @@ export default class PopularityBar extends React.Component {
           alignSelf: 'center',
           top: 0,
           position: 'relative',
-          alignContent: 'flex-start',
+          alignContent: 'flex-start'
         }}
         >
           <CardItem
@@ -96,7 +84,7 @@ export default class PopularityBar extends React.Component {
             <Progress.Bar style={{backgroundColor: '#eeee'}}
                           borderRadius={0} borderWidth={0}
                           width={width * 89 / 100}
-                          progress={0.3} />
+                          progress={0.3}/>
           </CardItem>
 
         </Card>
@@ -109,7 +97,7 @@ const styles = EStyleSheet.create({
   text: {
     color: '$textColor',
     fontSize: 14,
-    textAlign: 'left',
+    textAlign: 'left'
 
   },
   thumbnail: {

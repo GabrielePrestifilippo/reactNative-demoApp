@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, Button, ScrollView, Image, StyleSheet, RefreshControl, Linking, AsyncStorage} from 'react-native'
+import {ScrollView, RefreshControl, AsyncStorage} from 'react-native'
 import Influencer from '../components/Influencer'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
@@ -42,19 +42,19 @@ class Influencers extends React.Component {
   navigation = this.props.navigation
 
   componentWillMount() {
-/*
-    this.state = {
-      token: this.props.code
-    }
-    if (!this.state.token) {
-      var token = getToken(getMedia)
-      this.setState({token})
+    /*
+        this.state = {
+          token: this.props.code
+        }
+        if (!this.state.token) {
+          var token = getToken(getMedia)
+          this.setState({token})
 
-    }
-    else
-      getMedia(this.state.token)
+        }
+        else
+          getMedia(this.state.token)
 
-    */
+        */
 
   }
 

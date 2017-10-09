@@ -1,15 +1,15 @@
 import React from 'react'
-import { Text, View, Button, StyleSheet } from 'react-native'
+import {Text, View, StyleSheet} from 'react-native'
 import {
-  Icon,
+  Icon
 } from 'native-base'
 
 export default class Interests extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
   }
 
-  render () {
+  render() {
     var self = this
     return <View style={styles.interests}>
       {this.props.data.map(function (key, val) {
@@ -21,7 +21,7 @@ export default class Interests extends React.Component {
           }}
                 style={styles.deleteButton}
           >
-            <Icon style={styles.icon} name='close' />
+            <Icon style={styles.icon} name='close'/>
           </Text>
         </View>
       })}
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   interestText: {
     color: '#fbfbfb',
-    fontSize: 16,
+    fontSize: 16
   },
   deleteButton: {
     color: '#fbfbfb',
