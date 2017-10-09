@@ -1,63 +1,66 @@
 import React from 'react'
-import {Text, View, StyleSheet} from 'react-native'
+import {View, StyleSheet} from 'react-native'
 import {
-  Icon
+  Button, Text, Icon, Badge
 } from 'native-base'
 
 export default class Interests extends React.Component {
+
   constructor(props) {
     super(props)
   }
 
   render() {
     var self = this
+    const {deletable, addable, onDataChange} = this.props
+
     return <View style={styles.interests}>
       {this.props.data.map(function (key, val) {
-        return <View key={val} style={styles.interest}>
-          <Text style={styles.interestText}>{key}</Text>
-          <Text onPress={() => {
-            self.props.data.splice(self.props.data.indexOf(key), 1)
-            self.setState({data: self.props.data}) //update state
-          }}
-                style={styles.deleteButton}
-          >
+        return <View style={styles.buttonContainer} key={val}>
+          <Button
+            style={styles.button}
+            onPress={() => {
+              var remove = false
+              if (deletable)
+                remove = true
+              onDataChange(key, remove)
+            }}>
+
+            <Text>{key}</Text>
+            {addable &&
+            <Icon style={styles.icon} name='add'/>
+            }
+            {deletable &&
             <Icon style={styles.icon} name='close'/>
-          </Text>
+            }
+          </Button>
         </View>
       })}
     </View>
-
   }
 }
+
 const styles = StyleSheet.create({
   interests: {
-    padding: 10,
+    padding: 4,
     position: 'relative',
     justifyContent: 'flex-start',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    flex: 1
+    flex: 1,
   },
-  interest: {
-    backgroundColor: '#007ced',
-    borderColor: '#007ced',
-    borderWidth: 1,
-    borderRadius: 2,
-    margin: 5,
-    height: 45,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    padding: 10
 
+  button: {
+    backgroundColor: '#007ced',
+    padding: 4
   },
-  interestText: {
-    color: '#fbfbfb',
-    fontSize: 16
-  },
-  deleteButton: {
-    color: '#fbfbfb',
+  buttonContainer: {
     padding: 5
   },
-  icon: {fontSize: 16, paddingLeft: 2, color: 'white'}
+  icon: {
+    fontSize: 20,
+    lineHeight: 20,
+    color: 'white'
+  }
 
 })

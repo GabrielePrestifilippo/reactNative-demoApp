@@ -4,9 +4,6 @@ import {createStore} from 'redux'
 import {
   Scene,
   Router,
-  Actions,
-  Reducer,
-  ActionConst,
   Stack
 } from 'react-native-router-flux'
 
@@ -18,12 +15,12 @@ import Trending from './src/pages/Trending'
 import InfluencerPosts from './src/pages/InfluencerPosts'
 import Login from './src/pages/Login'
 import EStyleSheet from 'react-native-extended-stylesheet'
-
+import CustomTabBarComponent from './src/components/CustomTabBarComponent'
 
 EStyleSheet.build({
   $textColor: '#0275d8'
-
 })
+
 const store = createStore(appReducer)
 
 const myInfluencers = () => {
@@ -31,7 +28,8 @@ const myInfluencers = () => {
     <Provider store={store}>
       <Router wrapBy={connect()}>
         <Scene key="root" hideNavBar={true} hideTabBar={true}>
-          <Scene key="tabbar" swipeEnabled={false} hideNavBar={true} tabs={true} tabBarPosition="bottom">
+          <Scene key="tabbar">
+            swipeEnabled={false} hideNavBar={true} tabs={true} tabBarPosition="bottom">
             <Stack key='Influencers'>
               <Scene key='InfluencersList' title='Influencers' component={Influencers}/>
               <Scene key='InfluencerPosts' hideNavBar={true} title='Last Photo' component={InfluencerPosts}/>

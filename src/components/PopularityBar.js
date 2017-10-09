@@ -2,7 +2,7 @@ import React from 'react'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import {Actions} from 'react-native-router-flux'
 import {Modal, Dimensions, TouchableHighlight} from 'react-native'
-import {View, Card, CardItem, Left, Right, Label} from 'native-base'
+import {View, Card, CardItem, Text, Left, Right, Label} from 'native-base'
 
 import * as Progress from 'react-native-progress'
 
@@ -34,6 +34,7 @@ export default class PopularityBar extends React.Component {
 
     return (
       <View style={{height: 100}}>
+
         <Modal
           animationType="slide"
           transparent={false}
@@ -42,21 +43,15 @@ export default class PopularityBar extends React.Component {
             this.hideModal()
           }}
         >
-          <View onPress={() => {
+          <TouchableHighlight onPress={() => {
             this.hideModal()
-          }} style={{marginTop: 22}}>
+          }} style={{backgroundColor: 'lightblue', flex: 1}}>
             <View>
               <Text>Hello World!</Text>
-
-              <TouchableHighlight onPress={() => {
-                this.setModalVisible(!this.state.modalVisible)
-              }}>
-                <Text>Hide Modal</Text>
-              </TouchableHighlight>
-
             </View>
-          </View>
+          </TouchableHighlight>
         </Modal>
+
         <Card style={{
           flex: 1,
 
