@@ -10,16 +10,16 @@ const store = configureStore()
 registerScreens(store, Provider)
 
 const navigatorStyle = {
-  statusBarColor: '#831d19',
-  navigationBarColor: '#339999',
+  statusBarColor: '#339999',
+  //navigationBarColor: '#339999',
   navBarBackgroundColor: '#339999',
   navBarTextColor: '#ffffff',
   navBarButtonColor: '#ffffff',
-  statusBarTextColorScheme: 'light',
+  statusBarTextColorScheme: 'dark',
   navBarHidden: false,
-  tabBarButtonColor: 'red',
-  tabBarSelectedButtonColor: 'green',
-  tabBarBackgroundColor: 'blue'
+  tabBarButtonColor: 'white',
+  tabBarSelectedButtonColor: '#ffffff',
+ tabBarBackgroundColor: '#339999'
 }
 
 

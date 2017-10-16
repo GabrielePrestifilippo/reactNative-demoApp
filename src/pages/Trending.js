@@ -83,7 +83,7 @@ export default class Trending extends Component {
   }
 }
 
-const styles = EStyleSheet.create({
+const styles = {
   left: {
     alignSelf: 'flex-start',
     paddingLeft: '20%'
@@ -96,4 +96,4 @@ const styles = EStyleSheet.create({
     justifyContent: 'space-between',
     flex: 1
   }
-})
+}
