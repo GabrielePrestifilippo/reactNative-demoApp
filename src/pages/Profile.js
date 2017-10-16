@@ -15,6 +15,7 @@ function getSuggestedTags(callback) {
           getTagsUsedFromInstagram(res, callback)
         } else {
           suggestedTags = suggestedTags.concat(['sugg4', 'sugg2', 'sugg3'])
+          AsyncStorage.setItem('suggestedTags', JSON.stringify(suggestedTags))
           callback(suggestedTags)
         }
       })
