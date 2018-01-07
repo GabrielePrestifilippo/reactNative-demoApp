@@ -1,87 +1,80 @@
 import React from 'react'
-import {ScrollView, RefreshControl, AsyncStorage} from 'react-native'
+import { ScrollView, RefreshControl, AsyncStorage } from 'react-native'
 import Influencer from '../components/Influencer'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
+
+import { connect } from 'react-redux'
 
 import EStyleSheet from 'react-native-extended-stylesheet'
-import {setToken} from '../actions'
-
-
-async function getToken(navigator, callback) {
-  let token = undefined
-  try {
-    token = await AsyncStorage.getItem('token', (err, result) => {
-      if (!result || typeof(result) == 'object') {
-        navigator.push({screen: 'myInfluencer.Login'})
-      } else {
-        callback(result)
-      }
-    })
-
-  }
-  catch (error) {
-    console.log(error)
-  }
-
-}
-
-function getMedia(token) {
-  return fetch('https://api.instagram.com/v1/tags/nofilter/media/recent?access_token=' + token)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      return responseJson
-    })
-    .catch((error) => {
-      console.error(error)
-    })
-}
+import { setToken } from '../actions'
 
 class Influencers extends React.Component {
+  async getToken (navigator, callback) {
+    let token = undefined
 
-  componentWillMount() {
-    /*
-        this.state = {
-          token: this.props.code
+    try {
+      token = await AsyncStorage.getItem('token', (err, result) => {
+        if (!result || typeof(result) == 'object') {
+          navigator.push({screen: 'myInfluencer.Login'})
+        } else {
+          token = JSON.parse(result)
+          this.props.setToken(token)
+          callback(token.code)
         }
-        var navigator=this.props.navigator;
-        if (!this.state.token) {
-          var token = getToken(navigator, getMedia)
-          this.setState({token})
+      })
 
-        }
-        else
-          getMedia(this.state.token)
-
-        */
+    }
+    catch (error) {
+      console.log(error)
+    }
 
   }
 
-  componentDidMount() {
+  getMedia (token) {
+    return fetch('https://api.instagram.com/v1/tags/nofilter/media/recent?access_token=' + token)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        return responseJson
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
-  componentWillUnmount() {
+  componentWillMount () {
+
+    var navigator = this.props.navigator
+    if (!this.props.token.code || !this.props.token.expiry) {
+      this.getToken(navigator, this.getMedia)
+    }
+    else
+      this.getMedia(this.props.token.code)
+  }
+
+  componentDidMount () {
+  }
+
+  componentWillUnmount () {
     //Linking.removeEventListener('url', this._handleOpenURL);
   }
 
-  _handleOpenURL(event) {
+  _handleOpenURL (event) {
     const token = 1
     console.log(event.url)
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       refreshing: false
     }
   }
 
-  _onRefresh() {
+  _onRefresh () {
     this.setState({refreshing: true})
     setTimeout(() => this.setState({refreshing: false}), 100)
   }
 
-  render() {
+  render () {
     return (
       <ScrollView
         refreshControl={
@@ -106,12 +99,10 @@ class Influencers extends React.Component {
     )
   }
 
-
 }
 
-
 const mapStateToProps = state => ({
-  code: state.authReducer.token
+  token: state.token
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -119,9 +110,7 @@ const mapDispatchToProps = dispatch => ({
   setToken: (token) => dispatch(setToken(token))
 })
 
-
 export default connect(mapStateToProps, mapDispatchToProps)(Influencers)
-
 
 const styles = EStyleSheet.create({
   text: {

@@ -61,11 +61,7 @@ export default class HeaderPost extends React.Component {
   }
 }
 
-HeaderPost.propTypes = {
-  name: PropTypes.string,
-  image: PropTypes.string
 
-}
 const styles = EStyleSheet.create({
   text: {
     color: '$textColor',
