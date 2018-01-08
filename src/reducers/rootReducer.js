@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import {token} from './index';
+import {tags, token} from './index';
+
 
 const rootReducer = combineReducers({
-  token
+  token,
+  tags
 });
 
 export default rootReducer;

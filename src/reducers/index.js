@@ -7,3 +7,29 @@ export function token (state = {code: null, expiry: null}, action) {
       return state
   }
 }
+
+export function tags (state = {myTags: []}, action) {
+
+  switch (action.type) {
+    case 'setTags':
+      return {
+        ...state,
+        myTags: action.item
+      }
+    case 'removeTag':
+      return {
+        ...state,
+        myTags: [
+          ...state.myTags.slice(0, state.myTags.indexOf(action.item)),
+          ...state.myTags.slice(state.myTags.indexOf(action.item) + 1)
+        ]
+      }
+    case 'addTag':
+      return {
+        ...state,
+        myTags: state.myTags.concat(action.item)
+      }
+    default:
+      return state
+  }
+}

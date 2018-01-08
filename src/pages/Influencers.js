@@ -1,13 +1,39 @@
 import React from 'react'
-import { ScrollView, RefreshControl, AsyncStorage } from 'react-native'
+import { ScrollView, RefreshControl, AsyncStorage, View, Text } from 'react-native'
 import Influencer from '../components/Influencer'
 
 import { connect } from 'react-redux'
 
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { setToken } from '../actions'
+import { setToken, setTags } from '../actions'
 
 class Influencers extends React.Component {
+
+  static navigatorStyle = {
+    statusBarColor: '#339999',
+    //navigationBarColor: '#339999',
+    navBarBackgroundColor: '#339999',
+    navBarTextColor: '#ffffff',
+    navBarButtonColor: '#ffffff',
+    statusBarTextColorScheme: 'dark',
+    navBarHidden: false,
+    tabBarButtonColor: 'white',
+    tabBarSelectedButtonColor: '#ffffff',
+    tabBarBackgroundColor: '#339999'
+  }
+
+  componentWillMount () {
+    this.props.navigator.setTitle({
+      title: 'Influencers'
+    })
+    var navigator = this.props.navigator
+    if (!this.props.token.code || !this.props.token.expiry) {
+      this.getToken(navigator, this.getMedia)
+    }
+    else
+      this.getMedia(this.props.token.code)
+  }
+
   async getToken (navigator, callback) {
     let token = undefined
 
@@ -30,24 +56,26 @@ class Influencers extends React.Component {
   }
 
   getMedia (token) {
-    return fetch('https://api.instagram.com/v1/tags/nofilter/media/recent?access_token=' + token)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        return responseJson
+    if (!this.props.tags.myTags || !this.props.tags.myTags[0]) {
+      AsyncStorage.getItem('myTags', async (err, result) => {
+        if (!result) {
+          return
+        } else {
+          let myTags = JSON.parse(result)
+          this.props.setTags(myTags)
+          return fetch('https://api.instagram.com/v1/tags/' + this.props.tags.myTags[0] + '/media/recent?access_token=' + token)
+            .then((response) => response.json())
+            .then((responseJson) => {
+              this.setState({media: responseJson})
+              return responseJson
+            })
+            .catch((error) => {
+              console.error(error)
+            })
+        }
       })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
-
-  componentWillMount () {
-
-    var navigator = this.props.navigator
-    if (!this.props.token.code || !this.props.token.expiry) {
-      this.getToken(navigator, this.getMedia)
     }
-    else
-      this.getMedia(this.props.token.code)
+
   }
 
   componentDidMount () {
@@ -65,7 +93,8 @@ class Influencers extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      refreshing: false
+      refreshing: false,
+      media: []
     }
   }
 
@@ -85,6 +114,10 @@ class Influencers extends React.Component {
           />
         }
       >
+        <View>
+          <Text>{JSON.stringify(this.props.tags.myTags)}</Text>
+          <Text>{JSON.stringify(this.state.media)}</Text>
+        </View>
         <Influencer
           name="Pippo"
           img="https://i.vimeocdn.com/portrait/6193893_640x640"
@@ -102,12 +135,14 @@ class Influencers extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.token
+  token: state.token,
+  tags: state.tags
 })
 
 const mapDispatchToProps = dispatch => ({
   goBack: () => Actions.back(),
-  setToken: (token) => dispatch(setToken(token))
+  setToken: (token) => dispatch(setToken(token)),
+  setTags: (token) => dispatch(setTags(token))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Influencers)

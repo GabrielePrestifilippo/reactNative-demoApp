@@ -22,36 +22,9 @@ const navigatorStyle = {
  tabBarBackgroundColor: '#339999'
 }
 
-
-Navigation.startTabBasedApp({
-  tabs: [
-    {
-      label: 'Influencers',
-      screen: 'myInfluencer.Influencers',
-      icon: 'ios-person',
-      selectedIcon: 'ios-person',
-      title: 'Hello World',
-      navigatorStyle
-    },
-    {
-      label: 'Trending',
-      screen: 'myInfluencer.Trending',
-      icon: 'ios-person',
-      selectedIcon: 'ios-person',
-      title: 'Hello World',
-      navigatorStyle
-    },
-    {
-      label: 'Profile',
-      screen: 'myInfluencer.Profile',
-      icon: 'ios-person',
-      selectedIcon: 'ios-person',
-      title: 'Hello World',
-      navigatorStyle
-    }
-  ],
-  tabsStyle: {},
-
-  animationType: 'slide-down'
-
-})
+Navigation.startSingleScreenApp({
+  screen: {
+    screen: 'myInfluencer.Login',
+    title: 'Instagram Login'
+  }
+});

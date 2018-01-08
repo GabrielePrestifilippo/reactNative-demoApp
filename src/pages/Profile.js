@@ -1,110 +1,127 @@
 import React from 'react'
-import {TextInput, StyleSheet, AsyncStorage, ScrollView} from 'react-native'
+import { TextInput, StyleSheet, AsyncStorage, ScrollView } from 'react-native'
 import Interests from '../components/Interests'
 import PopularityBar from '../components/PopularityBar'
-import {View, Card, Content, CardItem, Left, Right, Label} from 'native-base'
+import { View, Card, Content, CardItem, Left, Right, Label } from 'native-base'
+import { connect } from 'react-redux'
+import { setTags, removeTag, addTag } from '../actions'
 
-const myTags = []
-let suggestedTags = []
+let suggestedTags = {tags: []}
 
-function getSuggestedTags(callback) {
-  AsyncStorage.getItem('suggestedTags', async (err, result) => {
-    if (!result) {
-      AsyncStorage.getItem('token', (e, res) => {
-        if (res) {
-          getTagsUsedFromInstagram(res, callback)
-        } else {
-          suggestedTags = suggestedTags.concat(['sugg4', 'sugg2', 'sugg3'])
-          AsyncStorage.setItem('suggestedTags', JSON.stringify(suggestedTags))
-          callback(suggestedTags)
-        }
-      })
-    } else {
-      callback(JSON.parse(result))
-    }
-  })
-}
+class Profile extends React.Component {
 
-function getMyTags(callback) {
-  AsyncStorage.getItem('myTags', async (err, result) => {
-    if (!result) {
-      return
-    } else {
-      callback(JSON.parse(result))
-    }
-  })
-}
-
-function getTagsUsedFromInstagram(token, callback) {
-  fetch('https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token + '&count=10')
-    .then((response) => response.json())
-    .then((responseJson) => {
-      let tags = []
-      responseJson.data.forEach(function (elem) {
-        tags = tags.concat(elem.tags)
-      })
-      const counts = {}
-      tags.forEach(function (x) {
-        counts[x] = (counts[x] || 0) + 1
-      })
-      let sorted = Object.keys(counts).sort(function (a, b) {
-        return counts[b] - counts[a]
-      })
-      sorted = sorted.splice(0, 10)
-      tags = sorted
-      AsyncStorage.setItem('myTags', JSON.stringify(tags))
-      callback(tags)
-    })
-    .catch((error) => {
-      console.error(error)
-    })
-}
-
-export default class Profile extends React.Component {
-
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       text: '',
       inputState: '',
-      myTags: myTags,
       suggestedTags: suggestedTags
     }
 
+    this.onDataChange = this.changeData.bind(this)
+
   }
 
-  componentWillMount() {
+  getSuggestedTags (callback) {
+
+    AsyncStorage.getItem('suggestedTags', async (err, result) => {
+      if (result) {
+        const tags = JSON.parse(result)
+
+        if (tags.expiry && new Date(tags.expiry) > new Date()) {
+          callback(tags)
+        }
+        else {
+          this.getTagsUsedFromInstagram(this.props.token.code, callback)
+        }
+      } else {
+        this.getTagsUsedFromInstagram(this.props.token.code, callback)
+      }
+    })
+  }
+
+  getTagsUsedFromInstagram (token, callback) {
+    fetch('https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token + '&count=10')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        let tags = []
+        responseJson.data.forEach(function (elem) {
+          tags = tags.concat(elem.tags)
+        })
+        const counts = {}
+        tags.forEach(function (x) {
+          counts[x] = (counts[x] || 0) + 1
+        })
+        let sorted = Object.keys(counts).sort(function (a, b) {
+          return counts[b] - counts[a]
+        })
+        let notPresent = sorted.filter((t) => !this.props.tags.myTags.includes(t))
+        notPresent = notPresent.splice(0, 10)
+        tags = notPresent.map(t => t.toUpperCase())
+        let tomorrow = new Date()
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        let tagsToStore = {tags: tags, expiry: tomorrow.getTime()}
+        AsyncStorage.setItem('suggestedTags', JSON.stringify(tagsToStore))
+        callback(tagsToStore)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
+  componentWillMount () {
     //this.setState({ showLoading: true});
     var self = this
-    getSuggestedTags(function (res) {
+    this.getSuggestedTags(function (res) {
       self.setState({suggestedTags: res})
     })
-    getMyTags(function (res) {
-      self.setState({myTags: res})
-    })
 
   }
 
-  onDataChange(key, remove) {
+  changeData (key, remove) {
     var data
+    //remove from myTags
     if (remove) {
-      data = this.state.myTags
-      data.splice(data.indexOf(key), 1)
-      this.setState({myTags: data})
-      AsyncStorage.setItem('myTags', JSON.stringify(data))
+      this.props.removeTag(key)
+      AsyncStorage.setItem('myTags', JSON.stringify(this.props.tags.myTags))
     }
+    //add from suggested to mytags
     else {
-      data = this.state.suggestedTags
-      data.splice(data.indexOf(key), 1)
-      const newTags = this.state.myTags.concat(key)
-      this.setState({myTags: newTags})
-      AsyncStorage.setItem('myTags', JSON.stringify(newTags))
-      this.setState({suggestedTags: data})
+
+      let suggested=this.state.suggestedTags.tags;
+      suggested.splice(suggested.indexOf(key), 1)
+      //this.props.removeTag(key)
+      if (this.props.tags.myTags.indexOf(key) == -1) {
+        this.props.addTag(key)
+        //const newTags = this.props.tags.myTags.concat(key)
+        //this.props.setTags(newTags) push
+        AsyncStorage.setItem('myTags', JSON.stringify(this.props.tags.myTags))
+      }
+      this.setState({suggestedTags: suggested})
+      AsyncStorage.setItem('suggestedTags', JSON.stringify(suggested))
 
     }
   }
 
-  render() {
+  //writing to add to mytags
+  addTag (text) {
+    text = text.toUpperCase()
+    this.setState({text: ''})
+    if (this.props.tags.myTags.indexOf(text) == -1) {
+      this.props.add(text)
+      AsyncStorage.setItem('myTags', JSON.stringify(this.props.tags.myTags))
+
+      let suggested = this.state.suggestedTags
+      let tags = suggested.tags
+      if (tags.indexOf(text) !== -1) {
+        suggested.tags = tags.splice(tags.indexOf(text), 1)
+        AsyncStorage.setItem('suggestedTags', JSON.stringify(suggested))
+      }
+    }
+    this.setState({inputState: ''})
+  }
+
+  render () {
     return (
       <Content style={styles.container}>
         <Card>
@@ -116,24 +133,19 @@ export default class Profile extends React.Component {
               this.setState({text})
               this.setState({inputState: text})
               if (text.indexOf(' ') != -1) {
-                this.setState({text: ''})
-                const newTags = this.state.myTags.concat(text)
-                this.setState({myTags: newTags})
-                this.setState({inputState: ''})
+                this.addTag(text)
               }
             }}
             onSubmitEditing={async (event) => {
-              this.setState({text: ''})
-              const newTags = this.state.myTags.concat(event.nativeEvent.text)
-              this.setState({myTags: newTags})
-              this.setState({inputState: ''})
-              await AsyncStorage.setItem('myTags', JSON.stringify(newTags))
+              this.addTag(event.nativeEvent.text)
             }}
           />
+          {this.props.tags.myTags && this.props.tags.myTags[0] &&
           <Interests
-            onDataChange={this.onDataChange.bind(this)}
+            onDataChange={this.onDataChange}
             deletable={true}
-            data={this.state.myTags}/>
+            data={this.props.tags.myTags} />
+          }
         </Card>
 
         <Card style={{flex: 1}}>
@@ -144,18 +156,31 @@ export default class Profile extends React.Component {
           </CardItem>
 
           <Interests
-            onDataChange={this.onDataChange.bind(this)}
+            onDataChange={this.onDataChange}
             addable={true}
-            data={this.state.suggestedTags}/>
+            data={this.state.suggestedTags.tags} />
 
         </Card>
 
-        <PopularityBar/>
+        <PopularityBar />
 
       </Content>
     )
   }
 }
+
+const mapStateToProps = state => ({
+  token: state.token,
+  tags: state.tags
+})
+
+const mapDispatchToProps = dispatch => ({
+  setTags: (token) => dispatch(setTags(token)),
+  removeTag: (token) => dispatch(removeTag(token)),
+  addTag: (token) => dispatch(addTag(token))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)
 
 const styles = StyleSheet.create({
   container: {

@@ -1,21 +1,21 @@
 import React from 'react'
-import {View, StyleSheet} from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import {
   Button, Text, Icon, Badge
 } from 'native-base'
 
 export default class Interests extends React.Component {
 
-  constructor(props) {
+  constructor (props) {
     super(props)
   }
 
-  render() {
+  render () {
     var self = this
-    const {deletable, addable, onDataChange} = this.props
+    const {deletable, addable, onDataChange, data} = this.props
 
     return <View style={styles.interests}>
-      {this.props.data.map(function (key, val) {
+      {data.map(function (key, val) {
         return <View style={styles.buttonContainer} key={val}>
           <Button
             style={styles.button}
@@ -28,10 +28,10 @@ export default class Interests extends React.Component {
 
             <Text>{key}</Text>
             {addable &&
-            <Icon style={styles.icon} name='add'/>
+            <Icon style={styles.icon} name='add' />
             }
             {deletable &&
-            <Icon style={styles.icon} name='close'/>
+            <Icon style={styles.icon} name='close' />
             }
           </Button>
         </View>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 
   button: {
     backgroundColor: '#007ced',
-    padding: 4
+    padding: 2
   },
   buttonContainer: {
     padding: 5
