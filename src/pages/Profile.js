@@ -79,16 +79,22 @@ class Profile extends React.Component {
   }
 
   changeData (key, remove) {
-    var data
+
     //remove from myTags
     if (remove) {
+
+      let myTags = this.props.tags.myTags
+      let newTags = [
+        ...myTags.slice(0, myTags.indexOf(key)),
+        ...myTags.slice(myTags.indexOf(key) + 1)
+      ]
       this.props.removeTag(key)
-      AsyncStorage.setItem('myTags', JSON.stringify(this.props.tags.myTags))
+      AsyncStorage.setItem('myTags', JSON.stringify(newTags))
     }
     //add from suggested to mytags
     else {
 
-      let suggested=this.state.suggestedTags.tags;
+      let suggested = this.state.suggestedTags.tags
       suggested.splice(suggested.indexOf(key), 1)
       //this.props.removeTag(key)
       if (this.props.tags.myTags.indexOf(key) == -1) {

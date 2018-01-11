@@ -63,20 +63,48 @@ class Influencers extends React.Component {
         } else {
           let myTags = JSON.parse(result)
           this.props.setTags(myTags)
-          return fetch('https://api.instagram.com/v1/tags/' + this.props.tags.myTags[0] + '/media/recent?access_token=' + token)
-            .then((response) => response.json())
-            .then((responseJson) => {
-              this.setState({media: responseJson})
-              return responseJson
-            })
-            .catch((error) => {
-              console.error(error)
-            })
+
+          this.props.tags.myTags.forEach((tag, index) => {
+            if (index < 3) {
+              this.fetchTag(tag, token, this.successTag.bind(this))
+            }
+          })
+
         }
       })
     }
 
   }
+
+  successTag (response) {
+    if (!response.data || !response.data.length) {
+      return
+    }
+    let people = this.state.people
+    response.data.forEach(function (d) {
+      const likes = d.likes.count
+      if (people[d.user.id]) {
+        people[d.user.id].likes += likes
+      } else {
+        people[d.user.id] = d.user
+        people[d.user.id].likes = likes
+      }
+    })
+    this.setState(people)
+  }
+
+  fetchTag (tag, token, callback) {
+    fetch('https://api.instagram.com/v1/tags/' + tag + '/media/recent?access_token=' + token)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        callback(responseJson)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
+  renderMedia () {}
 
   componentDidMount () {
   }
@@ -94,7 +122,8 @@ class Influencers extends React.Component {
     super(props)
     this.state = {
       refreshing: false,
-      media: []
+      media: [],
+      people: {}
     }
   }
 
@@ -117,7 +146,10 @@ class Influencers extends React.Component {
         <View>
           <Text>{JSON.stringify(this.props.tags.myTags)}</Text>
           <Text>{JSON.stringify(this.state.media)}</Text>
+          <Text>{JSON.stringify(this.state.people)}</Text>
         </View>
+
+        {this.renderMedia()}
         <Influencer
           name="Pippo"
           img="https://i.vimeocdn.com/portrait/6193893_640x640"
