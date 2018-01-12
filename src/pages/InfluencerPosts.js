@@ -1,19 +1,19 @@
 import React from 'react'
-import {View, BackHandler, ScrollView, StyleSheet} from 'react-native'
+import { View, BackHandler, ScrollView, StyleSheet } from 'react-native'
 import Post from '../components/Post'
 import HeaderPost from '../components/HeaderPost'
 
 export default class InfluencerPosts extends React.Component {
 
-  constructor(props) {
+  constructor (props) {
     super(props)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     BackHandler.addEventListener('hardwareBackPress', this.props.backAndroidHandler || this.onBackPress)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     BackHandler.removeEventListener('hardwareBackPress', this.props.backAndroidHandler || this.onBackPress)
   }
 
@@ -21,7 +21,7 @@ export default class InfluencerPosts extends React.Component {
     this.props.navigator.pop()
   }
 
-  render() {
+  render () {
     const params = this.props
 
     return (
@@ -31,7 +31,7 @@ export default class InfluencerPosts extends React.Component {
           img='https://i.vimeocdn.com/portrait/6193893_640x640'
           navigator={this.props.navigator}
         />
-        <ScrollView>
+        <ScrollView style={styles.scrollView}>
 
           <Post
             name="Image2"
@@ -66,6 +66,8 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginBottom: 20,
     marginTop: 10
-  }
+  }, scrollView: {
+    flex: 1
+  },
 
 })

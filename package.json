@@ -16,6 +16,7 @@
     "react-native-navigation": "*",
     "react-native-progress": "*",
     "react-redux": "*",
+    "realm": "^2.2.0",
     "redux": "*",
     "redux-thunk": "*"
   },

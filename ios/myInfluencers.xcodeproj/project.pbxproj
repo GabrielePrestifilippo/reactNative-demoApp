@@ -49,6 +49,9 @@
 		256D6327013A44C88B1B0466 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8D3C3076F794004AAB34041 /* SimpleLineIcons.ttf */; };
 		C6034EB6A1444EA58545C261 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5607DFDEB8034691A05E3E7B /* Zocial.ttf */; };
 		DB9AC3C06D244B5C8CF443B7 /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FCF6F025CC18447DBAE4A98C /* libReactNativeNavigation.a */; };
+		4704E758AB544A0F995AC2D1 /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6803F96DA0714DE1A0C2CF42 /* libRealmReact.a */; };
+		58196D80054F4860921D345A /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E6FF52F3CD4641BAD432DD /* libc++.tbd */; };
+		6B02C873B0904193932F074C /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F52922321BB4005A0C40B5E /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -284,6 +287,10 @@
 		5607DFDEB8034691A05E3E7B /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		9D6AA829A82549E58AF51B1A /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; name = "ReactNativeNavigation.xcodeproj"; path = "../node_modules/react-native-navigation/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		FCF6F025CC18447DBAE4A98C /* libReactNativeNavigation.a */ = {isa = PBXFileReference; name = "libReactNativeNavigation.a"; path = "libReactNativeNavigation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		17909AAF13064AF98F18DA13 /* RealmReact.xcodeproj */ = {isa = PBXFileReference; name = "RealmReact.xcodeproj"; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		6803F96DA0714DE1A0C2CF42 /* libRealmReact.a */ = {isa = PBXFileReference; name = "libRealmReact.a"; path = "libRealmReact.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		62E6FF52F3CD4641BAD432DD /* libc++.tbd */ = {isa = PBXFileReference; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = sourcecode.text-based-dylib-definition; explicitFileType = undefined; includeInIndex = 0; };
+		4F52922321BB4005A0C40B5E /* libz.tbd */ = {isa = PBXFileReference; name = "libz.tbd"; path = "usr/lib/libz.tbd"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = sourcecode.text-based-dylib-definition; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -312,6 +319,9 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				790E8C62BE714B399EE81475 /* libRCTActionSheet.a in Frameworks */,
 				DB9AC3C06D244B5C8CF443B7 /* libReactNativeNavigation.a in Frameworks */,
+				4704E758AB544A0F995AC2D1 /* libRealmReact.a in Frameworks */,
+				58196D80054F4860921D345A /* libc++.tbd in Frameworks */,
+				6B02C873B0904193932F074C /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,6 +490,7 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				9A177080B1ED4107877C53DE /* Exemple.xcodeproj */,
 				9D6AA829A82549E58AF51B1A /* ReactNativeNavigation.xcodeproj */,
+				17909AAF13064AF98F18DA13 /* RealmReact.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -501,6 +512,7 @@
 				00E356EF1AD99517003FC87E /* myInfluencersTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				8004EFFA1A5145F0B9F09B15 /* Resources */,
+				BDE666C51E2A4C6983EA88A7 /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -534,6 +546,16 @@
 				5607DFDEB8034691A05E3E7B /* Zocial.ttf */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+			path = "";
+		};
+		BDE666C51E2A4C6983EA88A7 /* Frameworks */ = {
+			isa = "PBXGroup";
+			children = (
+				62E6FF52F3CD4641BAD432DD /* libc++.tbd */,
+				4F52922321BB4005A0C40B5E /* libz.tbd */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 			path = "";
 		};
@@ -1042,11 +1064,13 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-deck-swiper\Exemples\ios\Exemple/**",
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
+					"$(SRCROOT)\..\node_modules\realm\src/**",
 				);
 			};
 			name = Debug;
@@ -1069,11 +1093,13 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-deck-swiper\Exemples\ios\Exemple/**",
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
+					"$(SRCROOT)\..\node_modules\realm\src/**",
 				);
 			};
 			name = Release;
@@ -1097,6 +1123,7 @@
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-deck-swiper\Exemples\ios\Exemple/**",
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
+					"$(SRCROOT)\..\node_modules\realm\src/**",
 				);
 			};
 			name = Debug;
@@ -1119,6 +1146,7 @@
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-deck-swiper\Exemples\ios\Exemple/**",
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
+					"$(SRCROOT)\..\node_modules\realm\src/**",
 				);
 			};
 			name = Release;
@@ -1150,11 +1178,13 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-deck-swiper\Exemples\ios\Exemple/**",
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
+					"$(SRCROOT)\..\node_modules\realm\src/**",
 				);
 			};
 			name = Debug;
@@ -1186,11 +1216,13 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-deck-swiper\Exemples\ios\Exemple/**",
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
+					"$(SRCROOT)\..\node_modules\realm\src/**",
 				);
 			};
 			name = Release;
@@ -1217,6 +1249,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1241,6 +1274,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);

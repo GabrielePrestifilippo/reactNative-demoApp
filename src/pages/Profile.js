@@ -5,8 +5,10 @@ import PopularityBar from '../components/PopularityBar'
 import { View, Card, Content, CardItem, Left, Right, Label } from 'native-base'
 import { connect } from 'react-redux'
 import { setTags, removeTag, addTag } from '../actions'
+import realm from '../components/realm'
+import { getSuggestedTags, getMyTags } from '../components/Helper'
 
-let suggestedTags = {tags: []}
+let suggestedTags = []
 
 class Profile extends React.Component {
 
@@ -18,26 +20,39 @@ class Profile extends React.Component {
       suggestedTags: suggestedTags
     }
 
+    this.db = {
+      myTags: null,
+      suggestedTags: null
+    }
+
     this.onDataChange = this.changeData.bind(this)
 
   }
 
-  getSuggestedTags (callback) {
+  retrieveSuggestedTags (callback) {
 
-    AsyncStorage.getItem('suggestedTags', async (err, result) => {
-      if (result) {
-        const tags = JSON.parse(result)
+    this.db.suggestedTags = getSuggestedTags(realm)
+    if (this.db.suggestedTags.tags && this.db.suggestedTags.tags.length !== 0) {
+      callback(this.db.suggestedTags.tags)
+    } else {
+      this.getTagsUsedFromInstagram(this.props.token.code, callback)
+    }
+    /*
+        AsyncStorage.getItem('suggestedTags', async (err, result) => {
+          if (result) {
+            const tags = JSON.parse(result)
 
-        if (tags.expiry && new Date(tags.expiry) > new Date()) {
-          callback(tags)
-        }
-        else {
-          this.getTagsUsedFromInstagram(this.props.token.code, callback)
-        }
-      } else {
-        this.getTagsUsedFromInstagram(this.props.token.code, callback)
-      }
-    })
+            if (tags.expiry && new Date(tags.expiry) > new Date()) {
+              callback(tags)
+            }
+            else {
+              this.getTagsUsedFromInstagram(this.props.token.code, callback)
+            }
+          } else {
+            this.getTagsUsedFromInstagram(this.props.token.code, callback)
+          }
+        })
+        */
   }
 
   getTagsUsedFromInstagram (token, callback) {
@@ -58,11 +73,7 @@ class Profile extends React.Component {
         let notPresent = sorted.filter((t) => !this.props.tags.myTags.includes(t))
         notPresent = notPresent.splice(0, 10)
         tags = notPresent.map(t => t.toUpperCase())
-        let tomorrow = new Date()
-        tomorrow.setDate(tomorrow.getDate() + 1)
-        let tagsToStore = {tags: tags, expiry: tomorrow.getTime()}
-        AsyncStorage.setItem('suggestedTags', JSON.stringify(tagsToStore))
-        callback(tagsToStore)
+        callback(tags)
       })
       .catch((error) => {
         console.error(error)
@@ -72,56 +83,61 @@ class Profile extends React.Component {
   componentWillMount () {
     //this.setState({ showLoading: true});
     var self = this
-    this.getSuggestedTags(function (res) {
-      self.setState({suggestedTags: res})
+    this.db.myTags = getMyTags(realm)
+    this.retrieveSuggestedTags(function (res) {
+      let suggested = []
+      res.forEach(t => {
+        suggested.push(t)
+      })
+      self.setState({suggestedTags: suggested})
     })
 
   }
 
   changeData (key, remove) {
-
     //remove from myTags
     if (remove) {
-
-      let myTags = this.props.tags.myTags
-      let newTags = [
-        ...myTags.slice(0, myTags.indexOf(key)),
-        ...myTags.slice(myTags.indexOf(key) + 1)
-      ]
       this.props.removeTag(key)
-      AsyncStorage.setItem('myTags', JSON.stringify(newTags))
+      realm.write(() => {
+        this.db.myTags.tags.splice(this.db.myTags.tags.indexOf(key), 1)
+      })
     }
     //add from suggested to mytags
     else {
 
       let suggested = this.state.suggestedTags.tags
       suggested.splice(suggested.indexOf(key), 1)
-      //this.props.removeTag(key)
       if (this.props.tags.myTags.indexOf(key) == -1) {
         this.props.addTag(key)
-        //const newTags = this.props.tags.myTags.concat(key)
-        //this.props.setTags(newTags) push
-        AsyncStorage.setItem('myTags', JSON.stringify(this.props.tags.myTags))
+        realm.write(() => {
+          this.db.myTags.tags.push(key)
+        })
       }
+      realm.write(() => {
+        this.db.suggestedTags.tags.splice(this.db.suggestedTags.tags.indexOf(key), 1)
+      })
       this.setState({suggestedTags: suggested})
-      AsyncStorage.setItem('suggestedTags', JSON.stringify(suggested))
-
     }
   }
 
   //writing to add to mytags
   addTag (text) {
     text = text.toUpperCase()
+    text = text.replace(/\s/g, '')
     this.setState({text: ''})
     if (this.props.tags.myTags.indexOf(text) == -1) {
-      this.props.add(text)
-      AsyncStorage.setItem('myTags', JSON.stringify(this.props.tags.myTags))
+      this.props.addTag(text)
+      realm.write(() => {
+        this.db.myTags.tags.push(text)
+      })
 
       let suggested = this.state.suggestedTags
-      let tags = suggested.tags
-      if (tags.indexOf(text) !== -1) {
-        suggested.tags = tags.splice(tags.indexOf(text), 1)
-        AsyncStorage.setItem('suggestedTags', JSON.stringify(suggested))
+
+      if (suggested.indexOf(text) !== -1) {
+        suggested = suggested.splice(suggested.indexOf(text), 1)
+        realm.write(() => {
+          this.db.suggestedTags.tags.splice(this.db.suggestedTags.tags.indexOf(text), 1)
+        })
       }
     }
     this.setState({inputState: ''})
@@ -161,11 +177,12 @@ class Profile extends React.Component {
             </Left>
           </CardItem>
 
+          {this.state.suggestedTags &&
           <Interests
             onDataChange={this.onDataChange}
             addable={true}
-            data={this.state.suggestedTags.tags} />
-
+            data={this.state.suggestedTags} />
+          }
         </Card>
 
         <PopularityBar />

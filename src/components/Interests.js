@@ -15,7 +15,7 @@ export default class Interests extends React.Component {
     const {deletable, addable, onDataChange, data} = this.props
 
     return <View style={styles.interests}>
-      {data.map(function (key, val) {
+      {data && data.map(function (key, val) {
         return <View style={styles.buttonContainer} key={val}>
           <Button
             style={styles.button}

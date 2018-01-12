@@ -1,11 +1,13 @@
 import React from 'react'
-import { ScrollView, RefreshControl, AsyncStorage, View, Text } from 'react-native'
+import { ScrollView, RefreshControl, StyleSheet, View, Text } from 'react-native'
 import Influencer from '../components/Influencer'
 
 import { connect } from 'react-redux'
 
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { setToken, setTags } from '../actions'
+import realm from '../components/realm'
+import { initDB, getMyTags, getToken, getPeople } from '../components/Helper'
 
 class Influencers extends React.Component {
 
@@ -19,81 +21,93 @@ class Influencers extends React.Component {
     navBarHidden: false,
     tabBarButtonColor: 'white',
     tabBarSelectedButtonColor: '#ffffff',
-    tabBarBackgroundColor: '#339999'
+    tabBarBackgroundColor: '#339999',
+    drawUnderTabBar: false
+  }
+
+  constructor (props) {
+    super(props)
+    this.state = {
+      refreshing: false,
+      media: [],
+      people: {}
+    }
+    this.db = {people: null}
   }
 
   componentWillMount () {
     this.props.navigator.setTitle({
       title: 'Influencers'
     })
-    var navigator = this.props.navigator
-    if (!this.props.token.code || !this.props.token.expiry) {
-      this.getToken(navigator, this.getMedia)
+
+    this.db.people = getPeople(realm)
+    let people = {}
+    this.db.people.list.forEach(p => {
+      people[p.id] = p
+    })
+    this.setState(people)
+
+    if (!this.props.token.code) {
+      let token = getToken(realm)
+      if (!token.code) {
+        this.props.navigator.push({screen: 'myInfluencer.Login'})
+      } else {
+        this.props.setToken({code: token.code, used: token.used})
+        this.getMedia(token.code)
+      }
     }
-    else
+    else {
       this.getMedia(this.props.token.code)
+    }
+
   }
 
-  async getToken (navigator, callback) {
-    let token = undefined
-
-    try {
-      token = await AsyncStorage.getItem('token', (err, result) => {
-        if (!result || typeof(result) == 'object') {
-          navigator.push({screen: 'myInfluencer.Login'})
-        } else {
-          token = JSON.parse(result)
-          this.props.setToken(token)
-          callback(token.code)
-        }
-      })
-
-    }
-    catch (error) {
-      console.log(error)
-    }
+  componentWillReceiveProps () {
 
   }
 
   getMedia (token) {
-    if (!this.props.tags.myTags || !this.props.tags.myTags[0]) {
-      AsyncStorage.getItem('myTags', async (err, result) => {
-        if (!result) {
-          return
-        } else {
-          let myTags = JSON.parse(result)
-          this.props.setTags(myTags)
 
-          this.props.tags.myTags.forEach((tag, index) => {
-            if (index < 3) {
-              this.fetchTag(tag, token, this.successTag.bind(this))
-            }
-          })
-
+    if (this.props.tags && this.props.tags.myTags)
+      this.props.tags.myTags.forEach((tag, index) => {
+        if (index < 10) {
+          this.fetchTag(tag, token, this.successTag.bind(this))
         }
       })
-    }
-
   }
 
   successTag (response) {
-    if (!response.data || !response.data.length) {
+    if (!response || !response.data || !response.data.length) {
       return
     }
     let people = this.state.people
     response.data.forEach(function (d) {
       const likes = d.likes.count
+
       if (people[d.user.id]) {
         people[d.user.id].likes += likes
+        if (d.images && d.images.standard_resolution && d.images.standard_resolution.url) {
+          people[d.user.id].last_picture = d.images.standard_resolution.url
+        }
       } else {
         people[d.user.id] = d.user
         people[d.user.id].likes = likes
+        if (d.images && d.images.standard_resolution && d.images.standard_resolution.url) {
+          people[d.user.id].last_picture = d.images.standard_resolution.url
+        }
       }
     })
+    let dbPeople = Object.keys(people).map(function (key) { return people[key] })
+    realm.write(() => {
+      this.db.people.list = dbPeople
+    })
+
     this.setState(people)
   }
 
   fetchTag (tag, token, callback) {
+    if (!tag)
+      return
     fetch('https://api.instagram.com/v1/tags/' + tag + '/media/recent?access_token=' + token)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -104,7 +118,21 @@ class Influencers extends React.Component {
       })
   }
 
-  renderMedia () {}
+  renderPeople () {
+    if (Object.keys(this.state.people).length === 0)
+      return
+    return Object.keys(this.state.people).map((key, index) => {
+      return (
+        <Influencer
+          key={this.state.people[key].id}
+          name={this.state.people[key].username}
+          avatar={this.state.people[key].profile_picture}
+          img={this.state.people[key].last_picture}
+          navigator={this.props.navigator}
+        />)
+    })
+
+  }
 
   componentDidMount () {
   }
@@ -118,15 +146,6 @@ class Influencers extends React.Component {
     console.log(event.url)
   }
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      refreshing: false,
-      media: [],
-      people: {}
-    }
-  }
-
   _onRefresh () {
     this.setState({refreshing: true})
     setTimeout(() => this.setState({refreshing: false}), 100)
@@ -135,6 +154,7 @@ class Influencers extends React.Component {
   render () {
     return (
       <ScrollView
+        style={styles.container}
         refreshControl={
           <RefreshControl
             colors={['#ee001c', '#EE0EAE', '#511AEE']}
@@ -149,17 +169,9 @@ class Influencers extends React.Component {
           <Text>{JSON.stringify(this.state.people)}</Text>
         </View>
 
-        {this.renderMedia()}
-        <Influencer
-          name="Pippo"
-          img="https://i.vimeocdn.com/portrait/6193893_640x640"
-          navigator={this.props.navigator}
-        />
-        <Influencer
-          name="Pippo1"
-          img="https://i.vimeocdn.com/portrait/6193893_640x640"
-          navigator={this.props.navigator}
-        />
+        {this.renderPeople()}
+        {this.renderPeople()}
+
       </ScrollView>
     )
   }
@@ -171,17 +183,17 @@ const mapStateToProps = state => ({
   tags: state.tags
 })
 
-const mapDispatchToProps = dispatch => ({
-  goBack: () => Actions.back(),
-  setToken: (token) => dispatch(setToken(token)),
-  setTags: (token) => dispatch(setTags(token))
-})
+const mapDispatchToProps = dispatch => ({})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Influencers)
 
-const styles = EStyleSheet.create({
+const styles = StyleSheet.create({
   text: {
-    color: '$textColor'
+    color: '#222'
+  },
+  container: {
+    paddingTop: 56,
+    paddingBottom: 56
   },
   postContainer: {
     flex: 1,

@@ -1,8 +1,13 @@
-export function token (state = {code: null, expiry: null}, action) {
+export function token (state = {code: null, used: null}, action) {
 
   switch (action.type) {
     case 'setToken':
       return {...action.item}
+    case 'setUsed':
+      return {
+        ...state,
+        used: action.item
+      }
     default:
       return state
   }
